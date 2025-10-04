@@ -32,6 +32,7 @@ CREATE TABLE products (
     category_id INT REFERENCES categories(id),
     price NUMERIC(12,2) NOT NULL,
     stock INT NOT NULL DEFAULT 0
+    image_name TEXT NOT NULL 
 );
 
 -- ตะกร้าสินค้า

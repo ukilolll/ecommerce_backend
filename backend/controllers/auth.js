@@ -1,18 +1,16 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+
 import db from "../services/database.js"
 import redis from "../services/redisConnect.js"
-
-import * as sv from "../services/auth.js"
+import validator from "../pkg/validator.js"
+import {validateObj,generateOtp,sendOtp} from "../services/auth.js"
 
 export async function register(req,res){
     try{
-    const body = req.body || {};
-    if (!req.body) body = {}
-    const {error,val} = sv.validator.register.validate(body,{ abortEarly: false })
-    if (error){
-        const errMessage = error.details.map(err => err.message);
-        return res.status(400).json({error:errMessage})
+    const {error ,errorMsg , body } = validator(validateObj.register,req.body)
+    if(error){
+        return res.status(400).json({errorMsg})
     }
 
     //check already use email
@@ -25,11 +23,11 @@ export async function register(req,res){
     const pwdHash =  await bcrypt.hash(body.password,saltround)
     body.passwordHash = pwdHash
 
-    const otp = sv.generateOtp()
+    const otp = generateOtp()
 
     await redis.setEx(`otp:${body.email}`, 99999999, JSON.stringify({body , otp, state:"register"}));
 
-    // await sv.sendOtp(body.email)
+    // await sendOtp(body.email)
 
     return res.json({ ok: true, message: 'If the email exists, an OTP has been sent.' });
 
@@ -41,11 +39,9 @@ export async function register(req,res){
 
 export async function login(req,res){
     try{
-    const body = req.body || {};
-    const {error,val} = sv.validator.login.validate(body,{ abortEarly: false })
-    if (error){
-        const errMessage = error.details.map(err => err.message);
-        return res.status(400).json({error:errMessage})
+        const {error ,errorMsg , body } = validator(validateObj.login,req.body)
+    if(error){
+        return res.status(400).json({errorMsg})
     }
 
     const result = await db.query({
@@ -63,7 +59,7 @@ export async function login(req,res){
     }
 
     const email = result.rows[0].email
-    const otp = sv.generateOtp()
+    const otp = generateOtp()
     const catchData = {
         otp,
         body:{
@@ -76,7 +72,7 @@ export async function login(req,res){
 
     await redis.setEx(`otp:${email}`, 99999999, JSON.stringify(catchData));
 
-    // await sv.sendOtp(body.email)
+    // await sendOtp(body.email)
 
     return res.json({ ok: true, email});
 
@@ -88,12 +84,11 @@ export async function login(req,res){
 
 export async function otpVerify(req,res){
     try{
-    const body = req.body || {};
-    const {error,val} = sv.validator.checkOtp.validate(body,{ abortEarly: false })
-    if (error){
-        const errMessage = error.details.map(err => err.message);
-        return res.status(400).json({error:errMessage})
+    const {error ,errorMsg , body } = validator(validateObj.checkOtp,req.body)
+    if(error){
+        return res.status(400).json({errorMsg})
     }
+    
 
     let rawCache = await redis.get(`otp:${body.email}`);
     if (rawCache) {

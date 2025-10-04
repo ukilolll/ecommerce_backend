@@ -1,6 +1,7 @@
 import crypto from "crypto"
 import nodemailer from "nodemailer"
 import Joi from "joi";
+import vildate from "../pkg/validator.js"
 
 
 const transporter = nodemailer.createTransport({
@@ -13,7 +14,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const validator = {
+
+export const validateObj = {
     register:Joi.object({
         username: Joi.string().alphanum().min(3).max(30).required(),
         password:Joi.string().min(8).max(30).required(),
@@ -27,9 +29,7 @@ export const validator = {
         username: Joi.string().alphanum().min(3).max(30).required(),
         password:Joi.string().min(8).max(30).required(),
     })
-
 }
-
 
 export function generateOtp() {
   return ('' + (100000 + crypto.randomInt(0, 900000))).slice(0, 6);
