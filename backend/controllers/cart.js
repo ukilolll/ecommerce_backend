@@ -1,0 +1,193 @@
+import db from "../services/database.js"
+import validator from "../pkg/validator.js";
+import { validateObj } from "../services/cart.js";
+
+export async function getCartId(req, res) {
+try{
+  const result = await db.query({
+    text: `SELECT * FROM carts WHERE user_id = $1`,
+    values: [req.user.userId],
+  });
+  
+  if (result.rows[0] != null) {
+    return res.json({ cartExist: true, cartId: result.rows[0].id });
+  } else {
+    return res.json({ cartExist: false });
+  }
+
+  } catch (err) {
+    console.log(err)
+    return    res.status(500).json({error:"internal server error"})
+  }
+
+}
+
+export async function postCart(req, res) {
+  try {
+    //chack cart already exist
+    const existingCart = await db.query({
+      text: 'SELECT id FROM carts WHERE user_id = $1',
+      values: [req.user.userId],
+    });
+
+    if (existingCart.rows.length > 0) {
+      return res.json({ 
+        cartOK: true, 
+        messageAddCart: "Cart already exists",
+        cartId: existingCart.rows[0].id 
+      });
+    }
+
+    // Create new cart - SERIAL will auto-generate the ID
+    const result = await db.query({
+      text: `INSERT INTO carts (user_id) VALUES ($1) RETURNING id`,
+      values: [req.user.userId],
+    });
+
+    return res.json({ 
+      cartOK: true, 
+      messageAddCart: "Cart created",
+      cartId: result.rows[0].id 
+    });
+  } catch (err) {
+    console.log(err)
+    return res.json({ cartOK: false, messageAddCart: err.message });
+  }
+}
+
+export async function postCartDtl(req, res) {
+  try {
+    const {error,errorMsg,body} = validator(validateObj.postCartDtl,req.body) 
+    if(error){
+       return res.status(400).json({errorMsg,cartDtlOK: false})
+    }
+
+    // Check if product already exists in cart
+    const pdResult = await db.query({
+      text: `SELECT * FROM cart_items WHERE cart_id = $1 AND product_id = $2`,
+      values: [req.body.cartId, req.body.productId],
+    });
+
+    if (pdResult.rowCount == 0) {
+      // Insert new cart item(product don't exists)
+      const result = await db.query({
+        text: `INSERT INTO cart_items (cart_id, product_id, quantity) 
+               VALUES ($1, $2, $3) RETURNING id`,
+        values: [req.body.cartId, req.body.productId, req.body.quantity || 1],
+      });
+      return res.json({ cartDtlOK: true, messageAddCart: "Item added to cart" });
+    } else {
+      // Update existing cart item quantity(product already exists)
+      const newQuantity = pdResult.rows[0].quantity + (req.body.quantity || 1);
+      const result = await db.query({
+        text: `UPDATE cart_items SET quantity = $1 
+               WHERE cart_id = $2 AND product_id = $3`,
+        values: [newQuantity, req.body.cartId, req.body.productId],
+      });
+      return res.json({ cartDtlOK: true, messageAddCart: "Item quantity updated" });
+    }
+  } catch (err) {
+    return res.json({
+      cartDtlOK: false,
+      messageAddCartDtl: err.message,
+    });
+  }
+}
+
+export async function sumCart(req, res) {
+  const result = await db.query({
+    text: `SELECT SUM(ci.quantity) AS qty, SUM(ci.quantity * p.price) AS money
+           FROM cart_items ci
+           JOIN products p ON ci.product_id = p.id
+           WHERE ci.cart_id = $1`,
+    values: [req.params.id],
+  });
+  
+  return res.json({
+    id: req.params.id,
+    qty: result.rows[0].qty || 0,
+    money: result.rows[0].money || 0,
+  });
+}
+
+export async function getCart(req, res) {
+  try {
+    const result = await db.query({
+      text: `SELECT c.*, 
+                    COUNT(ci.id) AS item_count,
+                    SUM(ci.quantity) AS sqty, 
+                    SUM(p.price * ci.quantity) AS sprice
+             FROM carts c
+             LEFT JOIN cart_items ci ON c.id = ci.cart_id
+             LEFT JOIN products p ON ci.product_id = p.id
+             WHERE c.id = $1
+             GROUP BY c.id`,
+      values: [req.params.id],
+    });
+    
+    return res.json(result.rows);
+  } catch (err) {
+    return res.json({ error: err.message });
+  }
+}
+
+export async function getCartDtl(req, res) {  
+  try {
+    const result = await db.query({
+      text: `SELECT ROW_NUMBER() OVER (ORDER BY ci.product_id) AS row_number,
+                    ci.product_id, p.name AS product_name, 
+                    ci.quantity, p.price
+             FROM cart_items ci
+             LEFT JOIN products p ON ci.product_id = p.id
+             WHERE ci.cart_id = $1
+             ORDER BY ci.product_id`,
+      values: [req.params.id],
+    });
+    
+    return res.json(result.rows);
+  } catch (err) {
+    return res.json({ error: err.message });
+  }
+}
+
+export async function getCartByCus(req, res) {
+  try {
+    const result = await db.query({
+      text: `SELECT ROW_NUMBER() OVER (ORDER BY c.id DESC) AS row_number,
+                    c.*, 
+                    COUNT(ci.id) AS item_count,
+                    SUM(ci.quantity) AS sqty, 
+                    SUM(p.price * ci.quantity) AS sprice
+             FROM carts c
+             LEFT JOIN cart_items ci ON c.id = ci.cart_id
+             LEFT JOIN products p ON ci.product_id = p.id
+             WHERE c.user_id = $1
+             GROUP BY c.id
+             ORDER BY c.id DESC`,
+      values: [req.body.id],
+    });
+    
+    return res.json(result.rows);
+  } catch (err) {
+    return res.json({ error: err.message });
+  }
+}
+
+export async function deleteCart(req, res) {
+    try{
+    const result = await db.query({
+        text: `DELETE FROM cart_items WHERE cart_id = $1`,
+        values: [req.params.id],
+    });
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "cart not found" });
+    }
+
+    return res.json({success:true,message:"delete cart"});
+    }catch (err) {
+    console.log(err)
+    return res.status(500).json({error:"internal server error"})
+  }
+
+}

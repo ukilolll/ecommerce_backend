@@ -36,7 +36,7 @@ export const validateObj = {
         category_id:Joi.number().required(),
         description: Joi.any(),
         price: Joi.number().required(),
-        stock: Joi.number().required(),
+        stock: Joi.number().integer().required(),
         image: Joi.any().required()
     }),
     putProduct:Joi.object({
@@ -45,7 +45,7 @@ export const validateObj = {
         category_id:Joi.number().required(),
         description: Joi.any(),
         price: Joi.number().required(),
-        stock: Joi.number().required(),
+        stock: Joi.number().integer().required(),
     }),
     postCategory:Joi.object({
       name: Joi.string().min(3).max(100).required(),

@@ -9,14 +9,14 @@ CREATE TABLE users (
 );
 
 -- ที่อยู่สำหรับจัดส่ง
-CREATE TABLE addresses (
-    id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id),
-    line1 TEXT NOT NULL,
-    city TEXT NOT NULL,
-    postal_code TEXT NOT NULL,
-    country TEXT NOT NULL
-);
+-- CREATE TABLE addresses (
+--     id SERIAL PRIMARY KEY,
+--     user_id UUID REFERENCES users(id),
+--     line1 TEXT NOT NULL,
+--     city TEXT NOT NULL,
+--     postal_code TEXT NOT NULL,
+--     country TEXT NOT NULL
+-- );
 
 -- หมวดหมู่สินค้า
 CREATE TABLE categories (
@@ -38,7 +38,7 @@ CREATE TABLE products (
 -- ตะกร้าสินค้า
 CREATE TABLE carts (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id)
+    user_id UUID REFERENCES users(id)
 );
 
 CREATE TABLE cart_items (
@@ -51,8 +51,7 @@ CREATE TABLE cart_items (
 -- คำสั่งซื้อ
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id),
-    address_id INT REFERENCES addresses(id),
+    user_id UUID REFERENCES users(id),
     status TEXT NOT NULL,                -- pending / paid / shipped / delivered
     total_amount NUMERIC(12,2) NOT NULL,
     created_at TIMESTAMP DEFAULT now()
@@ -63,5 +62,4 @@ CREATE TABLE order_items (
     order_id INT REFERENCES orders(id),
     product_id INT REFERENCES products(id),
     quantity INT NOT NULL,
-    unit_price NUMERIC(12,2) NOT NULL
 );

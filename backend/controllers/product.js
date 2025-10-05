@@ -56,7 +56,7 @@ export const getSearchProduct = async (req, res) => {
     res.status(500).json({error:"internal server error"})
   }
 };
-
+//admin can update stock in this route lol I am lazy
 export const postProduct = async (req, res) => {
   try {
     const {error,errorMsg,body} = validator(validateObj.postProduct,{...req.body,image:req.file});
