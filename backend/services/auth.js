@@ -1,7 +1,6 @@
 import crypto from "crypto"
 import nodemailer from "nodemailer"
 import Joi from "joi";
-import vildate from "../pkg/validator.js"
 
 
 const transporter = nodemailer.createTransport({

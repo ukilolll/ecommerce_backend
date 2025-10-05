@@ -7,7 +7,14 @@ import {uploadImage,getProductById,
     getSearchProduct,
     postProduct,
     putProduct,
-    deleteProduct} from "../controllers/product.js"
+    deleteProduct,
+    getCategories,
+    postCategory,
+    deleteCategory,
+    changeImageProduct
+} from "../controllers/product.js"
+
+
 
 const router = express.Router()
 
@@ -21,12 +28,14 @@ router.get("/products",getAllProduct)
 router.get("/products/:id",getProductById) 
 router.get("/products/searching/:search",getSearchProduct) 
 router.get("/products/Category/:id",getProductByCategoryId)
-//get Category
-//add Category (admin)
-//delete Category(admin)
 router.post("/products",authMiddleware({admin:true}),uploadImage(),postProduct) 
-router.put("/products/:id",authMiddleware({admin:true}),uploadImage(),putProduct) 
+router.put("/products",authMiddleware({admin:true}),putProduct) 
+router.patch("/products/image",authMiddleware({admin:true}),uploadImage(),changeImageProduct)
 router.delete("/products/:id",authMiddleware({admin:true}),deleteProduct) 
+
+router.get("/categories",getCategories)
+router.post("categories",authMiddleware({admin:true}),postCategory)
+router.delete("/categories/:id",authMiddleware({admin:true}),deleteCategory)
 
 
 export default router

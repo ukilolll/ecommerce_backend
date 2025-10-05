@@ -119,7 +119,7 @@ export async function otpVerify(req,res){
             const token = jwt.sign(
                 { id: cache.body.userId, email: cache.body.email ,status:cache.body.status },
                 process.env.SECRET_KEY,
-                { expiresIn: "1h" }
+                { expiresIn: "7d" }
             );
 
             await redis.del(`otp:${body.email}`);
@@ -128,7 +128,7 @@ export async function otpVerify(req,res){
                 httpOnly: true,   // cannot be accessed by JS
                 secure: false,
                 sameSite: "strict", // protect against CSRF
-                maxAge: 60 * 60 * 1000 * 24 * 7 // 1 week
+                maxAge: 60*60 *1000*24*7 // 1 week
             });
 
             return res.json({ success: true, message: "Login successful" });
@@ -158,15 +158,12 @@ export function authMiddleware(options = { admin: false }) {
         req.user = decoded; 
 
         if (options.admin && decoded.status === "member") {
-            console.log("call abort")
             return res.status(403).json({ success: false, message: "Forbidden: Admins only" });
              
         }
 
         return next();
     } catch (err) {
-        console.error("authMiddleware error:", err.message);
-
         if (err.name === "TokenExpiredError") {
             return res.status(401).json({ success: false, message: "Token expired" });
         }
