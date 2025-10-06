@@ -25,6 +25,7 @@ try{
 export async function postCart(req, res) {
   try {
     //chack cart already exist
+    console.log(req.user)
     const existingCart = await db.query({
       text: 'SELECT id FROM carts WHERE user_id = $1',
       values: [req.user.userId],
@@ -150,7 +151,7 @@ export async function getCartDtl(req, res) {
   }
 }
 
-export async function getCartByCus(req, res) {
+export async function getCartByUserId(req, res) {
   try {
     const result = await db.query({
       text: `SELECT ROW_NUMBER() OVER (ORDER BY c.id DESC) AS row_number,
@@ -164,7 +165,7 @@ export async function getCartByCus(req, res) {
              WHERE c.user_id = $1
              GROUP BY c.id
              ORDER BY c.id DESC`,
-      values: [req.body.id],
+      values: [req.user.userId],
     });
     
     return res.json(result.rows);
@@ -175,17 +176,28 @@ export async function getCartByCus(req, res) {
 
 export async function deleteCart(req, res) {
     try{
+    await db.query('BEGIN');
+
     const result = await db.query({
         text: `DELETE FROM cart_items WHERE cart_id = $1`,
         values: [req.params.id],
     });
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "cart not found" });
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "there are no item in cart or cart Id not exist" });
     }
 
+    await db.query({
+        text: `DELETE FROM carts WHERE id = $1`,
+        values: [req.params.id],
+    });
+
+    await db.query('COMMIT');
+
     return res.json({success:true,message:"delete cart"});
+
     }catch (err) {
+    await db.query('ROLLBACK');
     console.log(err)
     return res.status(500).json({error:"internal server error"})
   }

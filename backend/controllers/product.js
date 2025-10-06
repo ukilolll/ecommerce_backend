@@ -13,7 +13,7 @@ export const getAllProduct = async (req, res) => {
     }
     let offset = req.query.offset;
     if (!req.query.offset){
-        limit = 0
+        offset = 0
     }
 
 

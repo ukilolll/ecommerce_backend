@@ -3,16 +3,15 @@ import * as cartC from "../controllers/cart.js"
 import { authMiddleware } from "../controllers/auth.js"
 
 
-const router =express.Router()
-const cartRoute = router.use("/carts",authMiddleware())
+const router = express.Router()
 
-cartRoute.post('/chkcart',cartC.getCartId)
-cartRoute.get('/sumcart/:id',cartC.sumCart)
-cartRoute.get('/getcart/:id',cartC.getCart)
-cartRoute.get('/getcartdtl/:id',cartC.getCartDtl)
-cartRoute.post('/addcart',cartC.postCart)
-cartRoute.post('/addcartdtl',cartC.postCartDtl)
-cartRoute.post('/getcartbycus',cartC.getCartByCus)
-cartRoute.delete('/deleteCart/:id',cartC.deleteCart)
+router.get('/carts/chkcart',authMiddleware(),cartC.getCartId)
+router.get('/carts/sumcart/:id',authMiddleware(),cartC.sumCart)
+router.get('/carts/getcartdtl/:id',authMiddleware(),cartC.getCartDtl)
+router.get('/carts/getcart/:id',authMiddleware(),cartC.getCart)
+router.post('/carts/addcart',authMiddleware(),cartC.postCart)
+router.post('/carts/addcartdtl',authMiddleware(),cartC.postCartDtl)
+router.get('/carts/getcartbycus',authMiddleware(),cartC.getCartByUserId)
+router.delete('/carts/deleteCart/:id',authMiddleware(),cartC.deleteCart)
 
-export default cartRoute
+export default router

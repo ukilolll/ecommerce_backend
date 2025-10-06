@@ -9,6 +9,7 @@ import cors from "cors"
 import authRoute from "./routes/auth.js"
 import productRoute from "./routes/product.js"
 import cartRoute from "./routes/cart.js"
+import transitionRoute from "./routes/transition.js"
 
 const app = express()
 const port = process.env.PORT || 8080
@@ -30,6 +31,8 @@ app.use("/image",express.static("../project_db/images"))
 app.use(authRoute)
 app.use(productRoute)
 app.use(cartRoute)
+app.use(transitionRoute)
+
 
 
 app.listen(port,()=>{

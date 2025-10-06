@@ -117,7 +117,7 @@ export async function otpVerify(req,res){
         //state === login
         }else{
             const token = jwt.sign(
-                { id: cache.body.userId, email: cache.body.email ,status:cache.body.status },
+                { userId: cache.body.userId, email: cache.body.email ,status:cache.body.status },
                 process.env.SECRET_KEY,
                 { expiresIn: "7d" }
             );

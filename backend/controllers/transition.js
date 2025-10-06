@@ -1,64 +1,190 @@
 import db from "../services/database.js"
+import { validateObj } from "../services/transition.js";
+import validator from "../pkg/validator.js";
 
 //ซื้อสินค้า ย้าย data from cart to order
 export async function createOrder(req, res){
     try{
-    const totalResult = await db.query({
-    text: `SELECT SUM(ci.quantity * p.price) AS total
-            FROM cart_items ci
-            JOIN products p ON ci.product_id = p.id
-            WHERE ci.cart_id = $1`,
-    values: [req.params.id],
+    const orderDataResult = await db.query({
+      text: `SELECT ci.product_id, ci.quantity, p.price
+               FROM cart_items ci
+               JOIN products p ON ci.product_id = p.id
+               WHERE ci.cart_id = $1`,
+    values: [req.params.cartId],
     });
 
-    await client.query('BEGIN');
+    if (orderDataResult.rows.length === 0) {
+      return res.status(404).json({ message: "there are no item in cart or cart Id not exist" });
+    } 
 
-    const result = await db.query({
+    await db.query('BEGIN');
+
+    await db.query({
         text: `DELETE FROM cart_items WHERE cart_id = $1`,
         values: [req.params.id],
     });
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "cart not found" });
-    } 
+    await db.query({
+        text: `DELETE FROM carts WHERE id = $1`,
+        values: [req.params.id],
+    });
 
-    const orderData = result.rows
-    console.log(orderData)
+    const orderData = orderDataResult.rows; 
+    const totalAmount = orderData.reduce(
+        (sum, item) => sum + item.quantity * parseFloat(item.price)
+        , 0 );
 
-    const orderResult = await database.query({
+    const orderDetail = await db.query({
         text: `INSERT INTO orders (user_id, status, total_amount)
                VALUES ($1, $2, $3)
                RETURNING id, created_at`,
         values: [
           req.user.userId,
           'pending',
-          totalResult.rows[0].total,
+          totalAmount,
         ],
     });
 
     for (const item of orderData) {
-        await database.query({
+        await db.query({
           text: `INSERT INTO order_items (order_id, product_id, quantity)
-                 VALUES ($1, $2, $3, $4)`,
+                 VALUES ($1, $2, $3)`,
           values: [
-            orderResult.id,
+            orderDetail.rows[0].id,
             item.product_id,
             item.quantity,
           ],
         });
     }
+    console.log(orderDataResult.rows)
+    console.log(orderDetail.rows)
 
-    await client.query('COMMIT');
-    return res.status(201).json({success:true,message:"create order success"});
+    await db.query('COMMIT');
+    return res.status(201).json({success:true,message:"create order success",create_at:orderDetail.rows[0].created_at});
 
     }catch (err) {
-    await client.query('ROLLBACK');
+    await db.query('ROLLBACK');
     console.log(err)
     return res.status(500).json({error:"internal server error"})
   }
 }
 //user check transiton history and pesent
+export async function userCheckTransition(req, res) {
+  try{
+    let limit = req.query.limit;
+    if (!req.query.limit){
+        limit = 10
+    }
+    let offset = req.query.offset;
+    if (!req.query.offset){
+        offset = 0
+    }
+  const result = await db.query(
+    `SELECT 
+      o.id,
+      o.user_id,
+      u.username,
+      u.email,
+      o.status,
+      o.total_amount,
+      o.created_at,
+      json_agg(
+        json_build_object(
+          'product_id', p.id,
+          'name', p.name,
+          'quantity', oitem.quantity
+        )
+      ) AS products
+    FROM public.orders AS o
+    JOIN public.users AS u ON u.id = o.user_id
+    JOIN public.order_items AS oitem ON o.id = oitem.order_id
+    JOIN public.products AS p ON p.id = oitem.product_id
+    WHERE o.user_id = $1
+    GROUP BY 
+      o.id, o.user_id, u.username, u.email, o.status, o.total_amount, o.created_at
+    ORDER BY o.id
+    LIMIT $2 OFFSET $3;`,
+    [req.user.userId,limit,offset],
+  );
+  
+  return res.json(result.rows);
 
+  } catch (err) {
+    console.log(err)
+    return  res.status(500).json({error:"internal server error"})
+  }
+}
 //admin updata status
+export const updateStatus = async (req, res) => {
+  try {
+    const {error,errorMsg,body} = validator(validateObj.updateStatus,req.body) 
+    if(error){
+       return res.status(400).json({errorMsg})
+    }
 
+    const result = await db.query(
+      `UPDATE orders 
+       SET status=$1
+       WHERE id=$2 RETURNING *`,
+      [body.status, 
+        body.orderId, 
+      ]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "order not found" });
+    }
+
+    return res.json(result.rows);
+
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({error:"internal server error"})
+  }
+};
 //addmin chekc all users history
+export const adminCheckTransition = async (req, res) => {
+  try {
+    let limit = req.query.limit;
+    if (!req.query.limit){
+        limit = 10
+    }
+    let offset = req.query.offset;
+    if (!req.query.offset){
+        offset = 0
+    }
+
+    const result = await db.query(
+      `SELECT 
+        o.id,
+        o.user_id,
+        u.username,
+        u.email,
+        o.status,
+        o.total_amount,
+        o.created_at,
+        json_agg(
+          json_build_object(
+            'product_id', p.id,
+            'name', p.name,
+            'quantity', oitem.quantity
+          )
+        ) AS products
+      FROM public.orders AS o
+      JOIN public.users AS u ON u.id = o.user_id
+      JOIN public.order_items AS oitem ON o.id = oitem.order_id
+      JOIN public.products AS p ON p.id = oitem.product_id
+      GROUP BY 
+        o.id, o.user_id, u.username, u.email, o.status, o.total_amount, o.created_at
+      ORDER BY o.id
+      LIMIT $1 OFFSET $2;
+      `,
+      [limit , offset]
+    );
+    res.json(result.rows);
+    
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({error:"internal server error"})
+  }
+};
