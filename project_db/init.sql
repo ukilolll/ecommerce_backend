@@ -6,6 +6,7 @@ CREATE TABLE users (
     email TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     status TEXT NOT NULL
+    profile_image TEXT ,
 );
 
 -- ที่อยู่สำหรับจัดส่ง

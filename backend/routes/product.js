@@ -18,12 +18,6 @@ import {uploadImage,getProductById,
 
 const router = express.Router()
 
-router.get("/",authMiddleware({admin:false}),(req,res) =>{
-    return res.json({
-        data:req.user
-    })
-})
-
 router.get("/products",getAllProduct) 
 router.get("/products/:id",getProductById) 
 router.get("/products/searching/:search",getSearchProduct) 

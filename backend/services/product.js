@@ -4,31 +4,6 @@ import path from "path";
 import fs from "fs"
 import { fileURLToPath } from "url";
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, '../project_db/images/');
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname); 
-  }
-});
-
-const fileFilter = (req, file, cb) => {
-  console.log("call function multer")
-
-  const ext = path.extname(file.originalname).toLowerCase();
-  if (ext === '.jpg' || ext === '.jpeg') {
-    cb(null, true);  
-  } else {
-    cb(new Error('Only .jpg and .jpeg files are allowed!'), false); 
-  }
-};
-
-export const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter
-});
 
 export const validateObj = {
     postProduct:Joi.object({
@@ -55,15 +30,38 @@ export const validateObj = {
       image: Joi.any().required()
     })
 }
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../project_db/product_images/');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname); 
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+
+  const ext = path.extname(file.originalname).toLowerCase();
+  if (ext === '.jpg' || ext === '.jpeg') {
+    cb(null, true);  
+  } else {
+    cb(new Error('Only .jpg and .jpeg files are allowed!'), false); 
+  }
+};
+
+export const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter
+});
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
 export const deleteFile = async (fileName) => {
   try {
-    const imagePath = path.resolve(__dirname, "../../project_db/images", fileName);
-    console.log(imagePath)
+    const imagePath = path.resolve(__dirname, "../../project_db/product_images", fileName);
     await fs.promises.unlink(imagePath);
     console.log("Deleted invalid file:", fileName);
   } catch (err) {

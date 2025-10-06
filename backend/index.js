@@ -27,7 +27,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/image",express.static("../project_db/images"))
+app.use("/product/image",express.static("../project_db/product_images"))
+app.use("/user/profile",express.static("../project_db/profile_images"))
 app.use(authRoute)
 app.use(productRoute)
 app.use(cartRoute)

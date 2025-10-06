@@ -4,7 +4,9 @@ import jwt from "jsonwebtoken"
 import db from "../services/database.js"
 import redis from "../services/redisConnect.js"
 import validator from "../pkg/validator.js"
-import {validateObj,generateOtp,sendOtp} from "../services/auth.js"
+import {validateObj,generateOtp,sendOtp,upload,deleteFile} from "../services/auth.js"
+
+export function uploadImage() {return upload.single("image")}
 
 export async function register(req,res){
     try{
@@ -65,9 +67,9 @@ export async function login(req,res){
         body:{
             email,
             userId:result.rows[0].id,
-            status:  result.rows[0].status
+            status:  result.rows[0].status,
         },
-        state:"login"  ,
+        state:"login" ,
     }
 
     await redis.setEx(`otp:${email}`, 99999999, JSON.stringify(catchData));
@@ -145,6 +147,55 @@ export async function otpVerify(req,res){
     }
 }
 
+export async function uploadUserProfile(req,res){
+  try{
+    if (!req.file){
+        return res.status(400).json({"errorMsg":"image not found"})
+    }
+
+    const oldImage = await db.query(
+      `SELECT profile_image FROM users WHERE id = $1`,
+      [req.user.userId]
+    );
+
+    if (oldImage.rows[0].profile_image !== null){
+        await deleteFile(oldImage.rows[0].profile_image);
+    }
+
+    await db.query(
+      `UPDATE users 
+       SET profile_image =$1
+       WHERE id=$2 RETURNING *`,
+      [ req.file.filename, req.user.userId]
+    );
+
+    res.json({success:true,message:"image change"});
+
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({error:"internal server error"})
+  }
+}
+
+export async function homePage(req,res){
+    try {
+    const result = await db.query(
+      "SELECT * FROM users WHERE id=$1",
+      [req.user.userId]
+    );
+    const userData = result.rows[0]
+    res.json({
+        "username": userData.username,
+        "email": userData.email,
+        "status": userData.status,
+        "profile_image": userData.profile_image
+    });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({error:"internal server error"})
+  }
+}
+
 export function authMiddleware(options = { admin: false }) {
     return function (req, res, next) {
     try {
@@ -172,3 +223,4 @@ export function authMiddleware(options = { admin: false }) {
 
 }
 }
+
