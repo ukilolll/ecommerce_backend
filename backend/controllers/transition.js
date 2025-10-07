@@ -1,6 +1,4 @@
 import db from "../services/database.js"
-import { validateObj } from "../services/transition.js";
-import validator from "../pkg/validator.js";
 
 //ซื้อสินค้า ย้าย data from cart to order
 export async function createOrder(req, res){
@@ -114,77 +112,3 @@ export async function userCheckTransition(req, res) {
     return  res.status(500).json({error:"internal server error"})
   }
 }
-//admin updata status
-export const updateStatus = async (req, res) => {
-  try {
-    const {error,errorMsg,body} = validator(validateObj.updateStatus,req.body) 
-    if(error){
-       return res.status(400).json({errorMsg})
-    }
-
-    const result = await db.query(
-      `UPDATE orders 
-       SET status=$1
-       WHERE id=$2 RETURNING *`,
-      [body.status, 
-        body.orderId, 
-      ]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "order not found" });
-    }
-
-    return res.json(result.rows);
-
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({error:"internal server error"})
-  }
-};
-//addmin chekc all users history
-export const adminCheckTransition = async (req, res) => {
-  try {
-    let limit = req.query.limit;
-    if (!req.query.limit){
-        limit = 10
-    }
-    let offset = req.query.offset;
-    if (!req.query.offset){
-        offset = 0
-    }
-
-    const result = await db.query(
-      `SELECT 
-        o.id,
-        o.user_id,
-        u.username,
-        u.email,
-        o.status,
-        o.total_amount,
-        o.created_at,
-        json_agg(
-          json_build_object(
-            'product_id', p.id,
-            'name', p.name,
-            'quantity', oitem.quantity
-          )
-        ) AS products
-      FROM public.orders AS o
-      JOIN public.users AS u ON u.id = o.user_id
-      JOIN public.order_items AS oitem ON o.id = oitem.order_id
-      JOIN public.products AS p ON p.id = oitem.product_id
-      GROUP BY 
-        o.id, o.user_id, u.username, u.email, o.status, o.total_amount, o.created_at
-      ORDER BY o.id
-      LIMIT $1 OFFSET $2;
-      `,
-      [limit , offset]
-    );
-    res.json(result.rows);
-    
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({error:"internal server error"})
-  }
-};

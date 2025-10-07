@@ -4,7 +4,6 @@ import path from "path";
 import fs from "fs"
 import { fileURLToPath } from "url";
 
-
 export const validateObj = {
     postProduct:Joi.object({
         name: Joi.string().min(3).max(100).required(),

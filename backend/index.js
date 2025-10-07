@@ -10,6 +10,7 @@ import authRoute from "./routes/auth.js"
 import productRoute from "./routes/product.js"
 import cartRoute from "./routes/cart.js"
 import transitionRoute from "./routes/transition.js"
+import adminRoute from "./routes/admin.js"
 
 const app = express()
 const port = process.env.PORT || 8080
@@ -33,8 +34,7 @@ app.use(authRoute)
 app.use(productRoute)
 app.use(cartRoute)
 app.use(transitionRoute)
-
-
+app.use(adminRoute)
 
 app.listen(port,()=>{
     console.log(`server running at port ${port}`)
