@@ -3,7 +3,7 @@ info:
   title: electrical store e-commerce
   version: 1.0.0
 servers:
-  - url: http://{{baseurl}}
+  - url: http://localhost:3000
 tags:
   - name: product
   - name: authentication

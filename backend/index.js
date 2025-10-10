@@ -21,7 +21,6 @@ const port = process.env.PORT || 8080
 const swaggerfile = fs.readFileSync('swagger.yaml','utf-8')
 const swaggerDoc = yaml.parse(swaggerfile)
 // กำหนด path ที่จะให้เรียกหน้า Document ขึ้นมา
-app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDoc))
 
 app.use(cors())
 app.use(body_parser.json())
@@ -36,6 +35,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDoc))
 app.use(authRoute)
 app.use(productRoute)
 app.use(cartRoute)

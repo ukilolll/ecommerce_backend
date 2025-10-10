@@ -27,7 +27,7 @@ export async function register(req,res){
 
     const otp = generateOtp()
 
-    await redis.setEx(`otp:${body.email}`, 99999999, JSON.stringify({body , otp, state:"register"}));
+    await redis.setEx(`otp:${body.email}`, 60 * 3, JSON.stringify({body , otp, state:"register"}));
 
     // await sendOtp(body.email)
 
@@ -72,7 +72,7 @@ export async function login(req,res){
         state:"login" ,
     }
 
-    await redis.setEx(`otp:${email}`, 99999999, JSON.stringify(catchData));
+    await redis.setEx(`otp:${email}`, 60 * 3, JSON.stringify(catchData));
 
     // await sendOtp(body.email)
 
@@ -121,7 +121,7 @@ export async function otpVerify(req,res){
             const token = jwt.sign(
                 { userId: cache.body.userId, email: cache.body.email ,status:cache.body.status },
                 process.env.SECRET_KEY,
-                { expiresIn: "7d" }
+                { expiresIn: "30d" }
             );
 
             await redis.del(`otp:${body.email}`);
@@ -130,12 +130,11 @@ export async function otpVerify(req,res){
                 httpOnly: true,   // cannot be accessed by JS
                 secure: false,
                 sameSite: "strict", // protect against CSRF
-                maxAge: 60*60 *1000*24*7 // 1 week
+                maxAge: 1000*60*60*24*30 // 1 month
             });
 
             return res.json({ success: true, message: "Login successful" });
         }
-
 
     }else{
         return res.status(401).json({ success: false, message: "OTP expired" });
