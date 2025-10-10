@@ -1,0 +1,803 @@
+openapi: 3.0.0
+info:
+  title: electrical store e-commerce
+  version: 1.0.0
+servers:
+  - url: http://{{baseurl}}
+tags:
+  - name: product
+  - name: authentication
+  - name: cart
+  - name: transition
+  - name: admin
+  - name: category
+paths:
+  /products:
+    get:
+      tags:
+        - product
+      summary: all product
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: '100'
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          example: '0'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+                example: Express
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '204'
+            ETag:
+              schema:
+                type: string
+                example: W/"cc-I8+FunEdpJUwCdauOdL5aNTbzQk"
+            Date:
+              schema:
+                type: string
+                example: Fri, 10 Oct 2025 09:40:19 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                    {
+                        "id": 1,
+                        "name": "Smartphone Galaxy A15",
+                        "description": {
+                            "brand": "Samsung",
+                            "color": "Blue",
+                            "screen": "6.5 inch",
+                            "storage": "128GB"
+                        },
+                        "category_id": 1,
+                        "price": "8990.00",
+                        "stock": 120,
+                        "image_name": "galaxy-a15.jpg"
+                    }
+                ]
+  /product/image/{image_name}:
+    get:
+      tags:
+        - product
+      summary: image
+      parameters:
+        - name: image_name
+          in: path
+          schema:
+            type: string
+          required: true
+          example: microwave-23l.jpg
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /product/{id}:
+    get:
+      tags:
+        - product
+      summary: product by id
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '2'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - product
+      summary: delete product by id
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /product/searching/{search}:
+    get:
+      tags:
+        - product
+      summary: search product
+      parameters:
+        - name: search
+          in: path
+          schema:
+            type: string
+          required: true
+          example: phone
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /product/category/{id}:
+    get:
+      tags:
+        - product
+      summary: get product by category id
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /product:
+    post:
+      tags:
+        - product
+      summary: postProduct
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: iphone 10
+                category_id:
+                  type: integer
+                  example: '1'
+                description:
+                  type: string
+                  example: |-
+                    {
+                      "battery": "2,900 mAh",
+                      "color": "red",
+                      "screen": "5.8 inch",
+                      "storage": "64GB"
+                    }
+                price:
+                  type: integer
+                  example: '13900'
+                stock:
+                  type: integer
+                  example: '69'
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - product
+      summary: putproduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                productId: 10
+                name: iphone 10
+                description:
+                  battery: 2,900 mAh
+                  color: red
+                  screen: 5.8 inch
+                  storage: 64GB
+                category_id: 1
+                price: '13900.00'
+                stock: 69
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /product/image:
+    patch:
+      tags:
+        - product
+      summary: change product image
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: integer
+                  example: '10'
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /register:
+    post:
+      tags:
+        - authentication
+      summary: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                username: ukibutsucker
+                password: '1234567890'
+                email: peerawit.av@ku.th
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /login:
+    post:
+      tags:
+        - authentication
+      summary: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                username: ukilolll
+                password: '1234567890'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /otp/verify:
+    post:
+      tags:
+        - authentication
+      summary: verify-otp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: ukikillme@gmail.com
+                otp: 907419
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /user/profile:
+    post:
+      tags:
+        - authentication
+      summary: upload profile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /user/profile/{image_name}:
+    get:
+      tags:
+        - authentication
+      summary: profile
+      parameters:
+        - name: image_name
+          in: path
+          schema:
+            type: string
+          required: true
+          example: 1759761840866-483648534-you_what_else_might_cry.jpg
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /:
+    get:
+      tags:
+        - authentication
+      summary: home page
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /carts/chkcart:
+    get:
+      tags:
+        - cart
+      summary: check cart That Exist
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /carts/getcartdtl/{cartId}:
+    get:
+      tags:
+        - cart
+      summary: get cart detail by cart id
+      parameters:
+        - name: cartId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /carts/sumcart/{cartId}:
+    get:
+      tags:
+        - cart
+      summary: get  price sum cart
+      parameters:
+        - name: cartId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /carts/getcartbycus:
+    get:
+      tags:
+        - cart
+      summary: get cart by detail userId
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /carts/getcart/{cartId}:
+    get:
+      tags:
+        - cart
+      summary: get cart by cart id
+      parameters:
+        - name: cartId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /carts/addcart:
+    post:
+      tags:
+        - cart
+      summary: createCart
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /carts/addcartdtl:
+    post:
+      tags:
+        - cart
+      summary: add items to cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                cartId: 6
+                productId: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /carts/deleteCart/{cartId}:
+    delete:
+      tags:
+        - cart
+      summary: delete cart by id
+      parameters:
+        - name: cartId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /order/{cartId}:
+    post:
+      tags:
+        - transition
+      summary: create order
+      requestBody:
+        content: {}
+      parameters:
+        - name: cartId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /order:
+    get:
+      tags:
+        - transition
+      summary: user check transition
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          example: '0'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: '100'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+                example: Express
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '227'
+            ETag:
+              schema:
+                type: string
+                example: W/"e3-OVWocbGC3+k+E2D2817GDOIzkrw"
+            Date:
+              schema:
+                type: string
+                example: Fri, 10 Oct 2025 10:18:17 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                    {
+                        "order_id": 6,
+                        "status": "paid",
+                        "total_amount": "46960.00",
+                        "created_at": "2025-10-06T04:46:33.692Z",
+                        "products": [
+                            {
+                                "product_id": 1,
+                                "name": "Smartphone Galaxy A15",
+                                "quantity": 3
+                            },
+                            {
+                                "product_id": 2,
+                                "name": "Laptop Aspire 5",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+  /admin/order:
+    get:
+      tags:
+        - admin
+      summary: admin get all user transition
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          example: '0'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: '100'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+                example: Express
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '324'
+            ETag:
+              schema:
+                type: string
+                example: W/"144-/tLaK3jrYWNVy6RPIFawbEgZ9tw"
+            Date:
+              schema:
+                type: string
+                example: Fri, 10 Oct 2025 10:11:01 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                    {
+                        "id": 6,
+                        "user_id": "0ac013a9-8e13-469d-b602-bf1470224a05",
+                        "username": "ukibutsucker",
+                        "email": "peerawit.av@ku.th",
+                        "status": "paid",
+                        "total_amount": "46960.00",
+                        "created_at": "2025-10-06T04:46:33.692Z",
+                        "products": [
+                            {
+                                "product_id": 1,
+                                "name": "Smartphone Galaxy A15",
+                                "quantity": 3
+                            },
+                            {
+                                "product_id": 2,
+                                "name": "Laptop Aspire 5",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+  /admin/members:
+    get:
+      tags:
+        - admin
+      summary: admin get all members
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          example: '0'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: '100'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+                example: Express
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '219'
+            ETag:
+              schema:
+                type: string
+                example: W/"db-peUhNRiQO5xb+bG1n60+YTWavZw"
+            Date:
+              schema:
+                type: string
+                example: Fri, 10 Oct 2025 10:13:09 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                    {
+                        "id": "0ac013a9-8e13-469d-b602-bf1470224a05",
+                        "username": "ukibutsucker",
+                        "email": "peerawit.av@ku.th",
+                        "password_hash": "$2b$11$X.JOwMIe4ZlfTjhSZ9HHoeULZwhZ8Rj/6cSBjhQtsZvR/S9vDIV7G",
+                        "status": "member",
+                        "profile_image": null
+                    }
+                ]
+  /admin/order/status:
+    patch:
+      tags:
+        - admin
+      summary: admin updata status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                orderId: 6
+                status: paid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/admin:
+    patch:
+      tags:
+        - admin
+      summary: update role member to admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                userId: 0ac013a9-8e13-469d-b602-bf1470224a05
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /categories:
+    get:
+      tags:
+        - category
+      summary: all categories
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /category:
+    post:
+      tags:
+        - category
+      summary: post category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: air conditioner
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /category/{id}:
+    delete:
+      tags:
+        - category
+      summary: delete category by id
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

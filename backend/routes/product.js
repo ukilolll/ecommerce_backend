@@ -19,17 +19,18 @@ import {uploadImage,getProductById,
 const router = express.Router()
 
 router.get("/products",getAllProduct) 
-router.get("/products/:id",getProductById) 
-router.get("/products/searching/:search",getSearchProduct) 
-router.get("/products/Category/:id",getProductByCategoryId)
-router.post("/products",authMiddleware({admin:true}),uploadImage(),postProduct) 
-router.put("/products",authMiddleware({admin:true}),putProduct) 
-router.patch("/products/image",authMiddleware({admin:true}),uploadImage(),changeImageProduct)
-router.delete("/products/:id",authMiddleware({admin:true}),deleteProduct) 
+router.get("/product/:id",getProductById) 
+router.get("/product/searching/:search",getSearchProduct) 
+router.get("/product/category/:id",getProductByCategoryId)
+router.post("/product",authMiddleware({admin:true}),uploadImage(),postProduct) 
+router.put("/product",authMiddleware({admin:true}),putProduct) 
+router.patch("/product/image",authMiddleware({admin:true}),uploadImage(),changeImageProduct)
+router.delete("/product/:id",authMiddleware({admin:true}),deleteProduct) 
+router.use("/product/image",express.static("../project_db/product_images"))
 
 router.get("/categories",getCategories)
-router.post("categories",authMiddleware({admin:true}),postCategory)
-router.delete("/categories/:id",authMiddleware({admin:true}),deleteCategory)
+router.post("category",authMiddleware({admin:true}),postCategory)
+router.delete("/category/:id",authMiddleware({admin:true}),deleteCategory)
 
 
 export default router

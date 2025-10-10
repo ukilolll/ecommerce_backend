@@ -111,7 +111,7 @@ export async function sumCart(req, res) {
   });
 }
 
-export async function getCart(req, res) {
+export async function getCartByCartId(req, res) {
   try {
     const result = await db.query({
       text: `SELECT c.*, 

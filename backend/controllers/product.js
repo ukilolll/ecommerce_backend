@@ -7,15 +7,8 @@ export function uploadImage() {return upload.single("image")}
 
 export const getAllProduct = async (req, res) => {
   try {
-    let limit = req.query.limit;
-    if (!req.query.limit){
-        limit = 10
-    }
-    let offset = req.query.offset;
-    if (!req.query.offset){
-        offset = 0
-    }
-
+    let limit = req.query.limit || 100;
+    let offset = req.query.offset || 0;
 
     const result = await db.query(
       "SELECT * FROM products ORDER BY id LIMIT $1 OFFSET $2",
@@ -193,14 +186,8 @@ export const getProductByCategoryId = async (req, res) => {
 
 export const getCategories = async (req,res) =>{
     try {
-    let limit;
-    if (!req.query.limit){
-        limit = 100
-    }
-
     const result = await db.query(
-      "SELECT * FROM categories ORDER BY id LIMIT $1",
-      [limit]
+      "SELECT * FROM categories ORDER BY id",
     );
     res.json(result.rows);
   } catch (err) {

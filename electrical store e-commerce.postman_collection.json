@@ -1,0 +1,1031 @@
+{
+	"info": {
+		"_postman_id": "9a470df3-7043-4c89-bfb9-4bece27819bd",
+		"name": "electrical store e-commerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "40434799"
+	},
+	"item": [
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "all product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/products?limit=10&offset=0",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/products?limit=1&offset=0",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"products"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "1"
+										},
+										{
+											"key": "offset",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "204"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"cc-I8+FunEdpJUwCdauOdL5aNTbzQk\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Oct 2025 09:40:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Smartphone Galaxy A15\",\n        \"description\": {\n            \"brand\": \"Samsung\",\n            \"color\": \"Blue\",\n            \"screen\": \"6.5 inch\",\n            \"storage\": \"128GB\"\n        },\n        \"category_id\": 1,\n        \"price\": \"8990.00\",\n        \"stock\": 120,\n        \"image_name\": \"galaxy-a15.jpg\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "image",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/product/image/:image_name",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"product",
+								"image",
+								":image_name"
+							],
+							"variable": [
+								{
+									"key": "image_name",
+									"value": "microwave-23l.jpg"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "product by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/product/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"product",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/product/searching/:search",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"product",
+								"searching",
+								":search"
+							],
+							"variable": [
+								{
+									"key": "search",
+									"value": "phone"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get product by category id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/product/category/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"product",
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postProduct",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "iphone 10",
+									"type": "text"
+								},
+								{
+									"key": "category_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "{\n  \"battery\": \"2,900 mAh\",\n  \"color\": \"red\",\n  \"screen\": \"5.8 inch\",\n  \"storage\": \"64GB\"\n}",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "13900",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "69",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/DELL/Downloads/iphon10promax.jpg"
+								}
+							]
+						},
+						"url": "{{baseURL}}/product"
+					},
+					"response": []
+				},
+				{
+					"name": "putproduct",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\": 10,\r\n    \"name\": \"iphone 10\",\r\n    \"description\": {\r\n        \"battery\": \"2,900 mAh\",\r\n        \"color\": \"red\",\r\n        \"screen\": \"5.8 inch\",\r\n        \"storage\": \"64GB\"\r\n    },\r\n    \"category_id\": 1,\r\n    \"price\": \"13900.00\",\r\n    \"stock\": 69\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/product"
+					},
+					"response": []
+				},
+				{
+					"name": "change product image",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "productId",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/DELL/Downloads/iphone10Golden.jpg"
+								}
+							]
+						},
+						"url": "{{baseURL}}/product/image"
+					},
+					"response": []
+				},
+				{
+					"name": "delete product by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/product/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"product",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "authentication",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"ukibutsucker\",\r\n    \"password\":\"1234567890\",\r\n    \"email\":\"peerawit.av@ku.th\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/register"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"ukilolll\",\r\n    \"password\":\"1234567890\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/login"
+					},
+					"response": []
+				},
+				{
+					"name": "verify-otp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"ukikillme@gmail.com\",\r\n    \"otp\":907419\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/otp/verify"
+					},
+					"response": []
+				},
+				{
+					"name": "upload profile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/DELL/OneDrive/Pictures/Saved Pictures/you_what_else_might_cry.jpg"
+								}
+							]
+						},
+						"url": "{{baseURL}}/user/profile"
+					},
+					"response": []
+				},
+				{
+					"name": "profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/profile/:image_name",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"profile",
+								":image_name"
+							],
+							"variable": [
+								{
+									"key": "image_name",
+									"value": "1759761840866-483648534-you_what_else_might_cry.jpg"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "home page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}/"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "cart",
+			"item": [
+				{
+					"name": "check cart That Exist",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}/carts/chkcart"
+					},
+					"response": []
+				},
+				{
+					"name": "get cart detail by cart id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/carts/getcartdtl/:cartId",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts",
+								"getcartdtl",
+								":cartId"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get  price sum cart",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/carts/sumcart/:cartId",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts",
+								"sumcart",
+								":cartId"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get cart by detail userId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}/carts/getcartbycus"
+					},
+					"response": []
+				},
+				{
+					"name": "get cart by cart id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/carts/getcart/:cartId",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts",
+								"getcart",
+								":cartId"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createCart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "{{baseURL}}/carts/addcart"
+					},
+					"response": []
+				},
+				{
+					"name": "add items to cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cartId\":6,\r\n    \"productId\":1\r\n    // \"quantity\":3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/carts/addcartdtl"
+					},
+					"response": []
+				},
+				{
+					"name": "delete cart by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/carts/deleteCart/:cartId",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts",
+								"deleteCart",
+								":cartId"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "transition",
+			"item": [
+				{
+					"name": "create order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/order/:cartId",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"order",
+								":cartId"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user check transition",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/order?offset=0&limit=100",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"order"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "user transition",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/order?offset=0&limit=1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"order"
+									],
+									"query": [
+										{
+											"key": "offset",
+											"value": "0"
+										},
+										{
+											"key": "limit",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "227"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"e3-OVWocbGC3+k+E2D2817GDOIzkrw\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Oct 2025 10:18:17 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"order_id\": 6,\n        \"status\": \"paid\",\n        \"total_amount\": \"46960.00\",\n        \"created_at\": \"2025-10-06T04:46:33.692Z\",\n        \"products\": [\n            {\n                \"product_id\": 1,\n                \"name\": \"Smartphone Galaxy A15\",\n                \"quantity\": 3\n            },\n            {\n                \"product_id\": 2,\n                \"name\": \"Laptop Aspire 5\",\n                \"quantity\": 1\n            }\n        ]\n    }\n]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "admin get all user transition",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/admin/order?offset=0&limit=100",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"admin",
+								"order"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "admin get all user transition",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/admin/order?offset=0&limit=1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"admin",
+										"order"
+									],
+									"query": [
+										{
+											"key": "offset",
+											"value": "0"
+										},
+										{
+											"key": "limit",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "324"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"144-/tLaK3jrYWNVy6RPIFawbEgZ9tw\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Oct 2025 10:11:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 6,\n        \"user_id\": \"0ac013a9-8e13-469d-b602-bf1470224a05\",\n        \"username\": \"ukibutsucker\",\n        \"email\": \"peerawit.av@ku.th\",\n        \"status\": \"paid\",\n        \"total_amount\": \"46960.00\",\n        \"created_at\": \"2025-10-06T04:46:33.692Z\",\n        \"products\": [\n            {\n                \"product_id\": 1,\n                \"name\": \"Smartphone Galaxy A15\",\n                \"quantity\": 3\n            },\n            {\n                \"product_id\": 2,\n                \"name\": \"Laptop Aspire 5\",\n                \"quantity\": 1\n            }\n        ]\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "admin get all members",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/admin/members?offset=0&limit=100",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"admin",
+								"members"
+							],
+							"query": [
+								{
+									"key": "offset",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "admin get all members",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/admin/members?offset=0&limit=1",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"admin",
+										"members"
+									],
+									"query": [
+										{
+											"key": "offset",
+											"value": "0"
+										},
+										{
+											"key": "limit",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "219"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"db-peUhNRiQO5xb+bG1n60+YTWavZw\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Oct 2025 10:13:09 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"0ac013a9-8e13-469d-b602-bf1470224a05\",\n        \"username\": \"ukibutsucker\",\n        \"email\": \"peerawit.av@ku.th\",\n        \"password_hash\": \"$2b$11$X.JOwMIe4ZlfTjhSZ9HHoeULZwhZ8Rj/6cSBjhQtsZvR/S9vDIV7G\",\n        \"status\": \"member\",\n        \"profile_image\": null\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "admin updata status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderId\":6,\r\n    \"status\":\"paid\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/admin/order/status"
+					},
+					"response": []
+				},
+				{
+					"name": "update role member to admin",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":\"0ac013a9-8e13-469d-b602-bf1470224a05\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/admin/admin"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "all categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}/categories"
+					},
+					"response": []
+				},
+				{
+					"name": "post category",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"air conditioner\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/category"
+					},
+					"response": []
+				},
+				{
+					"name": "delete category by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/category/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

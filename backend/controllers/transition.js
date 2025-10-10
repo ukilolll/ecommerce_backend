@@ -69,20 +69,12 @@ export async function createOrder(req, res){
 //user check transiton history and pesent
 export async function userCheckTransition(req, res) {
   try{
-    let limit = req.query.limit;
-    if (!req.query.limit){
-        limit = 10
-    }
-    let offset = req.query.offset;
-    if (!req.query.offset){
-        offset = 0
-    }
+    let limit = req.query.limit || 100;
+    let offset = req.query.offset || 0;
+
   const result = await db.query(
     `SELECT 
-      o.id,
-      o.user_id,
-      u.username,
-      u.email,
+      o.id AS "order_id",
       o.status,
       o.total_amount,
       o.created_at,

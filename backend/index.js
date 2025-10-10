@@ -5,6 +5,9 @@ import express from "express"
 import  body_parser from "body-parser"
 import cookieParser from  "cookie-parser"
 import cors from "cors"
+import swaggerUI from "swagger-ui-express"
+import yaml from "yaml"
+import fs from "fs"
 
 import authRoute from "./routes/auth.js"
 import productRoute from "./routes/product.js"
@@ -14,6 +17,11 @@ import adminRoute from "./routes/admin.js"
 
 const app = express()
 const port = process.env.PORT || 8080
+
+const swaggerfile = fs.readFileSync('swagger.yaml','utf-8')
+const swaggerDoc = yaml.parse(swaggerfile)
+// กำหนด path ที่จะให้เรียกหน้า Document ขึ้นมา
+app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDoc))
 
 app.use(cors())
 app.use(body_parser.json())
@@ -28,8 +36,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/product/image",express.static("../project_db/product_images"))
-app.use("/user/profile",express.static("../project_db/profile_images"))
 app.use(authRoute)
 app.use(productRoute)
 app.use(cartRoute)

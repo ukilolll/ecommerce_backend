@@ -33,14 +33,8 @@ export const updateStatus = async (req, res) => {
 //addmin chekc all users history
 export const adminCheckTransition = async (req, res) => {
   try {
-    let limit = req.query.limit;
-    if (!req.query.limit){
-        limit = 10
-    }
-    let offset = req.query.offset;
-    if (!req.query.offset){
-        offset = 0
-    }
+    let limit = req.query.limit || 100;
+    let offset = req.query.offset || 0
 
     const result = await db.query(
       `SELECT 
@@ -79,14 +73,8 @@ export const adminCheckTransition = async (req, res) => {
 
 export const listMember = async (req, res) => {
 try{
-    let limit = req.query.limit;
-    if (!req.query.limit){
-        limit = 10
-    }
-    let offset = req.query.offset;
-    if (!req.query.offset){
-        offset = 0
-    }
+    let limit = req.query.limit || 100;
+    let offset = req.query.offset || 0;
 
 const result = await db.query(
       `SELECT * FROM "users" WHERE status = 'member' ORDER BY id LIMIT $1 OFFSET $2`,

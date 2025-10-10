@@ -8,10 +8,10 @@ const router = express.Router()
 router.get('/carts/chkcart',authMiddleware(),cartC.getCartId)
 router.get('/carts/sumcart/:id',authMiddleware(),cartC.sumCart)
 router.get('/carts/getcartdtl/:id',authMiddleware(),cartC.getCartDtl)
-router.get('/carts/getcart/:id',authMiddleware(),cartC.getCart)
+router.get('/carts/getcartbycus',authMiddleware(),cartC.getCartByUserId)
+router.get('/carts/getcart/:id',authMiddleware(),cartC.getCartByCartId)
 router.post('/carts/addcart',authMiddleware(),cartC.postCart)
 router.post('/carts/addcartdtl',authMiddleware(),cartC.postCartDtl)
-router.get('/carts/getcartbycus',authMiddleware(),cartC.getCartByUserId)
 router.delete('/carts/deleteCart/:id',authMiddleware(),cartC.deleteCart)
 
 export default router
