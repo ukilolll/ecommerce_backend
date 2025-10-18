@@ -31,15 +31,17 @@ export const validateObj = {
     login:Joi.object({
         username: Joi.string().alphanum().min(3).max(30).required(),
         password:Joi.string().min(8).max(30).required(),
-    })
+    }),
+    resendOtp:Joi.object({
+        email: Joi.string().email().required(),
+    }),
 }
 
 export function generateOtp() {
   return ('' + (100000 + crypto.randomInt(0, 900000))).slice(0, 6);
 }
 
-export async function sendOtp(email){
-    const otp = generateOtp()
+export async function sendOtp(email,otp){
 
     const emailData = {
     from: process.env.SMTP_USER,
