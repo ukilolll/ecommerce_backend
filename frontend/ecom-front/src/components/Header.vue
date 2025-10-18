@@ -47,14 +47,11 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: fixed;
-  top: 0;
-  z-index: 1000;
 }
 
 .header-top {
   width: 100%;
-  max-width: 1400px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
