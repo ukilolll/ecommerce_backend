@@ -1,0 +1,26 @@
+.footer {
+  width: 100%;
+  background-color: #d9d9d9;
+  color: #000;
+  font-family: "Freeman-Regular", Helvetica, sans-serif;
+  font-size: 1rem; /* smaller text */
+  text-align: center;
+  padding: 0.8rem 1rem; /* less padding */
+  position: relative;
+  bottom: 0;
+  left: 0;
+  margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    font-size: 0.8rem;
+  }
+}
