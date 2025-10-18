@@ -1,4 +1,6 @@
 <template>
+  <Header />
+  
   <div class="profile">
     <h2>User Profile</h2>
     <div v-if="loading">Loading...</div>
@@ -7,18 +9,19 @@
         <p>{{ profile }}</p>
     </div>
   </div>
+
+  <Footer />
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import Header from '@/components/Header.vue'
+import Footer from '@/components/footer.vue'
 
-// Reactive variables
 const profile = ref({})
 const loading = ref(false)
 const error = ref(null)
 
-// Function to fetch profile
 const fetchProfile = async () => {
   loading.value = true
   error.value = null
@@ -32,10 +35,11 @@ const fetchProfile = async () => {
   }
 }
 
-// Fetch profile when component mounts
 onMounted(() => {
   fetchProfile()
 })
+
+
 </script>
 
 <style scoped>

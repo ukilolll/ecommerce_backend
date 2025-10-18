@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginView from '../components/Login.vue'
-import RegisterView from '../components/Register.vue'
-import SendOtpView from '../components/SendOtp.vue'
-import ProfileView from '../components/Profile.vue'
+import LoginView from '../views/Login.vue'
+import RegisterView from '../views/Register.vue'
+import SendOtpView from '../views/SendOtp.vue'
+import ProfileView from '../views/Profile.vue'
 
 const routes = [
 { 
