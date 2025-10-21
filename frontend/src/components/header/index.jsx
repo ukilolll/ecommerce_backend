@@ -1,11 +1,17 @@
-import React from "react";
 import "./style.css";
+
+import axios from "axios";
+import {useState }from "react";
+import { useNavigate } from "react-router-dom";
 
 import cart from "/images/cart.png";
 import blank_profile from "/images/blank_profile.jpg";
 import search from "/images/search.png";
 
-const Header = () => {
+const Header = () => {  
+  const [serchText , setserchText] = useState("")
+  const navigatge = useNavigate()
+
   return (
     <header className="header">
       <div className="header-top">
@@ -16,11 +22,20 @@ const Header = () => {
         </div>
 
         <div className="search-box">
-          <input type="text" placeholder="ค้นหาที่นี่" />
-          <img src={search} alt="Search" className="search-icon" />
+          <input type="text" 
+          placeholder="ค้นหาที่นี่" 
+          value={serchText}
+          onChange={(e) => setserchText(e.target.value)}
+          onKeyDown={(e)=>{
+            if (e.key === 'Enter') {
+              navigatge(`/?search=${serchText}`)
+            }
+          }} 
+          />
+          <img src={search}  alt="Search" className="search-icon"onClick={()=>{navigatge(`/?search=${serchText}`)}}/>
         </div>
 
-        <div className="user">
+        <div className="user" onClick={()=>{navigatge("/profile")}}>
           <img src={blank_profile} alt="Profile" className="profile-img" />
           <span className="username">UkiTannyRiewkiNut</span>
         </div>

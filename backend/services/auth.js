@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
 
 export const validateObj = {
     register:Joi.object({
-        username: Joi.string().alphanum().min(3).max(30).required(),
+        username: Joi.string().min(3).max(30).required(),
         password:Joi.string().min(8).max(30).required(),
         email: Joi.string().email().required(),
     }),
@@ -29,12 +29,16 @@ export const validateObj = {
         otp:Joi.number().max(999999).required()
     }),
     login:Joi.object({
-        username: Joi.string().alphanum().min(3).max(30).required(),
+        username: Joi.string().min(3).max(30).required(),
         password:Joi.string().min(8).max(30).required(),
     }),
-    resendOtp:Joi.object({
-        email: Joi.string().email().required(),
+    updateUserInfo:Joi.object({
+        first_name: Joi.string().max(100).empty(""),
+        last_name:Joi.string().max(100).empty(""),
+        phone_number: Joi.string().max(10).empty(""),
+        date_of_birth:Joi.date()
     }),
+
 }
 
 export function generateOtp() {
@@ -71,10 +75,10 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
   const ext = path.extname(file.originalname).toLowerCase();
-  if (ext === '.jpg' || ext === '.jpeg') {
+  if (ext === '.jpg' || ext === '.jpeg' || ext === '.png') {
     cb(null, true);  
   } else {
-    cb(new Error('Only .jpg and .jpeg files are allowed!'), false); 
+    cb(new Error('Only .jpg , .png and .jpeg files are allowed!'), false); 
   }
 };
 

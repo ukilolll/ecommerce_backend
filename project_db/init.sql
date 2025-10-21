@@ -7,9 +7,10 @@ CREATE TABLE users (
     password_hash TEXT NOT NULL,
     status TEXT NOT NULL
     profile_image TEXT ,
-    --birthday 
-    --phone number
-    --fullname
+    birthday 
+    phone number TEXT ,
+    first_name TEXT
+    last_name TEXT,
 );
 
 -- ที่อยู่สำหรับจัดส่ง

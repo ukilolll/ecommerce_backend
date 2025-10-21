@@ -8,4 +8,6 @@ export const validateObj = {
     authorizeAdmin:Joi.object({
         userId:Joi.string().uuid().required(),
     })
+
+    
 }

@@ -12,7 +12,7 @@ export async function register(req,res){
     try{
     const {error ,errorMsg , body } = validator(validateObj.register,req.body)
     if(error){
-        return res.status(400).json({...errorMsg , ok:false})
+        return res.status(400).json({errorMsg:errorMsg , ok:false})
     }
 
     //check already use email
@@ -29,7 +29,7 @@ export async function register(req,res){
 
     await redis.setEx(`otp:${body.email}`, 60 * 5, JSON.stringify({body , otp, state:"register"}));
 
-    sendOtp(body.email,otp)
+    // sendOtp(body.email,otp)
 
     return res.json({ ok: true, message: 'If the email exists, an OTP has been sent.' });
 
@@ -43,7 +43,7 @@ export async function login(req,res){
     try{
         const {error ,errorMsg , body } = validator(validateObj.login,req.body)
     if(error){
-        return res.status(400).json({...errorMsg , ok:false})
+        return res.status(400).json({errorMsg:errorMsg , ok:false})
     }
 
     const result = await db.query({
@@ -74,7 +74,7 @@ export async function login(req,res){
 
     await redis.setEx(`otp:${email}`, 60 * 5, JSON.stringify(catchData));
 
-    sendOtp(body.email,otp)
+    // sendOtp(body.email,otp)
 
     return res.json({ ok: true, email});
 
@@ -88,7 +88,7 @@ export async function otpVerify(req,res){
     try{
     const {error ,errorMsg , body } = validator(validateObj.checkOtp,req.body)
     if(error){
-        return res.status(400).json({...errorMsg , ok:false})
+        return res.status(400).json({errorMsg:errorMsg , ok:false})
     }
     
 
@@ -143,6 +143,34 @@ export async function otpVerify(req,res){
     }
 }
 
+export function authMiddleware(options = { admin: false }) {
+    return function (req, res, next) {
+    try {
+        const token = req.cookies?.token;
+        if (!token) {
+            return res.status(401).json({ ok: false, errorMsg: "No token provided" });
+        }
+
+        const decoded = jwt.verify(token,  process.env.SECRET_KEY);
+
+        req.user = decoded; 
+
+        if (options.admin && decoded.status === "member") {
+            return res.status(403).json({ ok: false, errorMsg: "Forbidden: Admins only" });
+             
+        }
+
+        return next();
+    } catch (err) {
+        if (err.name === "TokenExpiredError") {
+            return res.status(401).json({ ok: false, errorMsg: "Token expired" });
+        }
+        return res.status(401).json({ ok: false, errorMsg: "Invalid token" });
+    }
+
+}
+}
+
 export async function uploadUserProfile(req,res){
   try{
     if (!req.file){
@@ -184,7 +212,12 @@ export async function homePage(req,res){
         "username": userData.username,
         "email": userData.email,
         "status": userData.status,
-        "profile_image": userData.profile_image
+        "profile_image": userData.profile_image,
+        "first_name":userData.first_name,
+        "last_name":userData.last_name,
+        "phone_number":userData.phone_number,
+        "date_of_birth":userData.date_of_birth
+        
     });
   } catch (err) {
     console.log(err)
@@ -192,31 +225,35 @@ export async function homePage(req,res){
   }
 }
 
-export function authMiddleware(options = { admin: false }) {
-    return function (req, res, next) {
-    try {
-        const token = req.cookies?.token;
-        if (!token) {
-            return res.status(401).json({ ok: false, errorMsg: "No token provided" });
-        }
-
-        const decoded = jwt.verify(token,  process.env.SECRET_KEY);
-
-        req.user = decoded; 
-
-        if (options.admin && decoded.status === "member") {
-            return res.status(403).json({ ok: false, errorMsg: "Forbidden: Admins only" });
-             
-        }
-
-        return next();
-    } catch (err) {
-        if (err.name === "TokenExpiredError") {
-            return res.status(401).json({ ok: false, errorMsg: "Token expired" });
-        }
-        return res.status(401).json({ ok: false, errorMsg: "Invalid token" });
+export async function  updateUserInfo(req,res){
+  try{
+    const {error ,errorMsg , body } = validator(validateObj.updateUserInfo,req.body)
+    if(error){
+        return res.status(400).json({errorMsg:errorMsg , ok:false})
     }
 
+    await db.query(
+      `UPDATE users 
+       SET first_name = $1,
+        "last_name" = $2,
+        "phone_number" = $3,
+        "date_of_birth" = $4
+       WHERE id = $5 `,
+    [
+        body.first_name,
+        body.last_name,
+        body.phone_number,
+        body.date_of_birth,
+        req.user.userId
+    ]
+    );
+
+    res.json({ok:true,message:"data change"});
+
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({errorMsg:"internal server error",ok:false})
+  }
 }
-}
+
 
