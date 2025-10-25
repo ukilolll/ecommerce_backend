@@ -28,7 +28,7 @@ export default function LoginHOBBEE(props) {
           }
 
         try {
-            const res = await axios.post('http://localhost:3000/login',reqData);
+            const res = await axios.post('/api/login',reqData);
             console.log(res.data);
             alert('login successful!');
             localStorage.setItem("verifyData", JSON.stringify({state:"login",email:res.data.email,data:reqData}));

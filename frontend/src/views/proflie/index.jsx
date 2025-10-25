@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
   const navigate = useNavigate()
-  const {isLogin,userData} = useUser()
+  const {isLogin,userData , isLoading} = useUser()
   const [profileImage, setProfileImage] = useState(null);
   const [form, setForm] = useState({
       "username": "",
@@ -80,25 +80,25 @@ const handleUpload = async (e) => {
 
   };
 
-  const fetchUserData = async ()=>{
+  const getUserData = async ()=>{
+    if (isLoading) return; 
     if(!isLogin){
       navigate("/login")
       return
     };
-    setForm(userData)
+    console.log(userData)
 
-    if (data.profile_image){
-      setProfileImage(`http://localhost:3000/user/profile/${data.profile_image}`)
+    if (userData.profile_image){
+      setProfileImage(`http://localhost:3000/user/profile/${userData.profile_image}`)
     }
-    res.data.date_of_birth = res.data.date_of_birth.substring(0,10)
-    console.log(res.data.date_of_birth)
-    setForm(res.data);
+    userData.date_of_birth = userData.date_of_birth.substring(0,10)
+    setForm(userData);
   }
 
 
   useEffect(() => {
-      fetchUserData();
-  }, [isLogin]);
+      getUserData();
+  }, [isLogin,isLoading,userData]);
 
   return (
 <>

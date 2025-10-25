@@ -6,29 +6,34 @@ const UserContext = createContext();
 export const UserProvider = ({children}) => {
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true); 
 
-    useEffect(()=>{
-    const checkLogin = async () => {
+      const fetchUserData = async () => {
       try {
         const res = await axios.get("/api/user/info", { withCredentials: true });
         setIsLogin(true)
         setUserData(res.data)
+        console.log(res.data)
       }catch(err){
         if (axios.isAxiosError(err)) {
-            if (err.response) {
             setIsLogin(false)
-            } 
         } else {
             console.error('Generic Error:', err.message);
+            setIsLogin(false)
         }
+        } finally {
+            setIsLoading(false);
       }
     }
-    checkLogin();
+
+    useEffect(()=>{
+        fetchUserData();
+        // console.log(`fetchUserData for update user state , is userlogin:${isLogin}`)
     } ,[])
 
 
   return (
-    <UserContext.Provider value={{ isLogin, setIsLogin , userData, setUserData }}>
+    <UserContext.Provider value={{ isLogin,isLoading ,userData , setIsLogin , fetchUserData }}>
         {children}
     </UserContext.Provider>
   );

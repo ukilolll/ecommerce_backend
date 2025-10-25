@@ -7,8 +7,10 @@ import { useNavigate } from "react-router-dom";
 import cart from "/images/cart.png";
 import blank_profile from "/images/blank_profile.jpg";
 import search from "/images/search.png";
+import {useUser} from "../../context"
 
-const Header = () => {  
+const Header = () => { 
+  const {isLogin} = useUser() 
   const [serchText , setserchText] = useState("")
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate()
@@ -51,7 +53,11 @@ const Header = () => {
         <img src={cart} alt="Cart" className="cart-icon" />
         <div className="profile" onClick={()=>{navigate("/profile")}}>
           <img src={blank_profile} alt="Profile" className="profile-img" />
-          <span className="username">จัดการบัญชีของคุณ</span>
+            {isLogin ? (
+              <span className="username">จัดการบัญชีของคุณ</span>
+            ) : (
+              <span className="username">login/register</span>
+            )}
         </div>
       </div>
 

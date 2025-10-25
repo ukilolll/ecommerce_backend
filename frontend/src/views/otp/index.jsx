@@ -5,9 +5,10 @@ import SmallCart from "/images/cart.png"
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-// import userContext from  "../../context"
+import {useUser} from  "../../context"
 
 export default function OTPPage(props) {
+  const { fetchUserData } = useUser()
   const navigate = useNavigate();
   const [otp, setOtp] = useState("");
 
@@ -23,7 +24,8 @@ export default function OTPPage(props) {
             console.log(res.data)
             alert('otp verify successful!');
             localStorage.removeItem("verifyData");
-            navigate("/profile");
+            await fetchUserData()
+            navigate("/");
         } catch (err) {
 
             if (axios.isAxiosError(err)) {

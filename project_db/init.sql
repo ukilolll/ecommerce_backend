@@ -7,21 +7,11 @@ CREATE TABLE users (
     password_hash TEXT NOT NULL,
     status TEXT NOT NULL
     profile_image TEXT ,
-    birthday 
+    birthday date , 
     phone number TEXT ,
     first_name TEXT
     last_name TEXT,
 );
-
--- ที่อยู่สำหรับจัดส่ง
--- CREATE TABLE addresses (
---     id SERIAL PRIMARY KEY,
---     user_id UUID REFERENCES users(id),
---     line1 TEXT NOT NULL,
---     city TEXT NOT NULL,
---     postal_code TEXT NOT NULL,
---     country TEXT NOT NULL
--- );
 
 -- หมวดหมู่สินค้า
 CREATE TABLE categories (
