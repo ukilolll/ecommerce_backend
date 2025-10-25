@@ -2,9 +2,8 @@ import styles from "./style";
 import Header from "../../components/header"
 import Footer from "../../components/footer"
 
-import React, { useState ,useEffect ,useNavi} from "react";
-import { useSearchParams } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import React, { useState ,useEffect } from "react";
+import { useSearchParams ,useNavigate } from 'react-router-dom';
 import ProductCard from "../../components/product";
 import axios from "axios";
 
@@ -17,17 +16,25 @@ export default function ShowProduct() {
     // define async function inside useEffect
     const fetchData = async () => {
       try {
-        let serchText = searchParams.get("search") || null;
+        let serchText = searchParams.get("search");
+        let serchCategory = searchParams.get("category");
         let url;
 
-        if (!serchText) {
-          url = `/api/products`;
-        } else {
+        if (serchText) {
           url = `/api/product/searching/${serchText}`;
+        }
+        else if(serchCategory){
+          url = `/api/product/category/${serchCategory}`
+        }
+        else {
+          url = `/api/products`;
         }
 
         const res = await axios.get(url);
         setProducts(res.data);
+
+        const catagoryData = await axios.get(`/api/categories`);
+        localStorage.setItem("catagoryData",JSON.stringify(catagoryData.data))
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -37,7 +44,7 @@ export default function ShowProduct() {
   }, [searchParams]); // re-run when query changes
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   // Pagination logic
   const totalPages = Math.ceil(products.length / itemsPerPage);
@@ -61,9 +68,9 @@ export default function ShowProduct() {
       <div style={styles.grid}>
         {currentItems.map((itemDetail) => (
           <ProductCard
+            onClick={()=>{navigate(`/product/detail/${itemDetail.id}`)}}
             key={itemDetail.id}
             ProductData={itemDetail}
-
           />
         ))}
       </div>

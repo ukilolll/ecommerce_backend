@@ -72,7 +72,13 @@
 .user {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 1rem;
+}
+
+.profile{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .profile-img {

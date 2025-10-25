@@ -1,7 +1,7 @@
 import "./style.css";
 
 import axios from "axios";
-import {useState }from "react";
+import {useState ,useEffect }from "react";
 import { useNavigate } from "react-router-dom";
 
 import cart from "/images/cart.png";
@@ -10,7 +10,20 @@ import search from "/images/search.png";
 
 const Header = () => {  
   const [serchText , setserchText] = useState("")
-  const navigatge = useNavigate()
+  const [categories, setCategories] = useState([]);
+  const navigate = useNavigate()
+
+  const handleSelect = (e) => {
+    const selectedId = e.target.value;
+      if (selectedId) {
+        navigate(`/?category=${selectedId}`);
+    }
+  }
+
+    useEffect(() => {
+      const data = JSON.parse(localStorage.getItem("catagoryData"))
+      setCategories(data);
+  }, []);
 
   return (
     <header className="header">
@@ -18,7 +31,6 @@ const Header = () => {
         <div className="logo">
           <div className="circle">H</div>
           <div className="title">OBBEE</div>
-          <img src={cart} alt="Cart" className="cart-icon" />
         </div>
 
         <div className="search-box">
@@ -28,24 +40,38 @@ const Header = () => {
           onChange={(e) => setserchText(e.target.value)}
           onKeyDown={(e)=>{
             if (e.key === 'Enter') {
-              navigatge(`/?search=${serchText}`)
+              navigate(`/?search=${serchText}`)
             }
           }} 
           />
-          <img src={search}  alt="Search" className="search-icon"onClick={()=>{navigatge(`/?search=${serchText}`)}}/>
+          <img src={search}  alt="Search" className="search-icon" onClick={()=>{navigate(`/?search=${serchText}`)}}/>
         </div>
 
-        <div className="user" onClick={()=>{navigatge("/profile")}}>
+      <div className="user">
+        <img src={cart} alt="Cart" className="cart-icon" />
+        <div className="profile" onClick={()=>{navigate("/profile")}}>
           <img src={blank_profile} alt="Profile" className="profile-img" />
-          <span className="username">UkiTannyRiewkiNut</span>
+          <span className="username">จัดการบัญชีของคุณ</span>
         </div>
       </div>
 
+      </div>
+
       <nav className="navbar">
-        <div className="nav-item">เครื่องใช้ไฟฟ้า</div>
-        <div className="nav-item">ทีวี/เครื่องเสียง</div>
-        <div className="nav-item">คอมพิวเตอร์</div>
-        <div className="nav-item">มือถือ/แท็บเล็ต</div>
+        <div className="nav-item" onClick={()=>{navigate(`/?category=${1}`)}}>Electronics</div>
+        <div className="nav-item" onClick={()=>{navigate(`/?category=${2}`)}}>Home Appliances</div>
+        <div className="nav-item" onClick={()=>{navigate(`/?category=${3}`)}}>Kitchen Appliances</div>
+
+        <div className="nav-item">
+          <select onChange={handleSelect} defaultValue="">
+            {categories.map(cat => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
       </nav>
     </header>
   );

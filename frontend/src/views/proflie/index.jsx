@@ -6,9 +6,12 @@ import blank_profile from "/images/blank_profile.jpg"
 
 import React, { useState ,useEffect} from "react";
 import axios from "axios";
-
+import {useUser} from "../../context.jsx"
+import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
+  const navigate = useNavigate()
+  const {isLogin,userData} = useUser()
   const [profileImage, setProfileImage] = useState(null);
   const [form, setForm] = useState({
       "username": "",
@@ -78,8 +81,11 @@ const handleUpload = async (e) => {
   };
 
   const fetchUserData = async ()=>{
-    const res = await axios.get("/api/user/info");
-    console.log(res.data);const data = res.data
+    if(!isLogin){
+      navigate("/login")
+      return
+    };
+    setForm(userData)
 
     if (data.profile_image){
       setProfileImage(`http://localhost:3000/user/profile/${data.profile_image}`)
@@ -92,7 +98,7 @@ const handleUpload = async (e) => {
 
   useEffect(() => {
       fetchUserData();
-  }, []);
+  }, [isLogin]);
 
   return (
 <>

@@ -73,7 +73,7 @@ export default function LoginHOBBEE(props) {
             <Login>Login</Login>
           </LoginButton>
           <WelcomeBack>WELCOME BACK</WelcomeBack>
-          <Group1>
+          <Group1 onClick={()=>{navigate("/register")}}>
             <DontHaveAnAccount>Don’t have an account?</DontHaveAnAccount>
             <SignUp>Sign up</SignUp>
           </Group1>

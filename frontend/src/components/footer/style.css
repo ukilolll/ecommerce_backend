@@ -2,14 +2,13 @@
   width: 100%;
   background-color: #d9d9d9;
   color: #000;
-  font-family: "Freeman-Regular", Helvetica, sans-serif;
-  font-size: 1rem; /* smaller text */
+  font-size: 1rem;
   text-align: center;
-  padding: 0.8rem 1rem; /* less padding */
-  position: relative;
+  padding: 0.8rem 1rem;
+  position: fixed; /* Changed from relative to fixed */
   bottom: 0;
   left: 0;
-  margin-top: auto;
+  z-index: 1000; /* Ensures footer stays on top of other content */
 }
 
 @media (max-width: 768px) {

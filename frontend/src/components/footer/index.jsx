@@ -1,6 +1,7 @@
 import React from "react";
 import "./style.css";
 
+//make my footer Stays on the bottom edge of the screen at all times, no matter where you scroll.
 const Footer = () => {
   return (
     <footer className="footer">
