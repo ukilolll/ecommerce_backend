@@ -23,6 +23,10 @@ export default function ProfilePage() {
       "date_of_birth":"",
   });
 
+  const handleLogout =()=>{
+    logout()
+  }
+
   const handleChange = async (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -205,7 +209,8 @@ const handleUpload = async (e) => {
             บันทึก
           </button>
         </form>
-
+        <button className="logoutBtn" style={styles.logoutBtn} onClick={handleLogout}>Logout</button>
+        
       </div>
     </div>
 

@@ -25,7 +25,7 @@ export const CartProvider = ({ children }) => {
     } catch (err) {
       console.error(err);
     }finally{
-      setIsLoadCart(false)
+      setIsLoadCart(!isLoadCart)
     }
   };
 

@@ -19,13 +19,13 @@ export async function createOrder(req, res){
 
     await db.query({
         text: `DELETE FROM cart_items WHERE cart_id = $1`,
-        values: [req.params.id],
+        values: [req.params.cartId],
     });
 
-    await db.query({
-        text: `DELETE FROM carts WHERE id = $1`,
-        values: [req.params.id],
-    });
+    // await db.query({
+    //     text: `DELETE FROM carts WHERE id = $1`,
+    //     values: [req.params.id],
+    // });
 
     const orderData = orderDataResult.rows; 
     const totalAmount = orderData.reduce(

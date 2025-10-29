@@ -14,6 +14,9 @@ import ProfilePage from './views/proflie'
 import ProductPage from "./views/product"
 import ProductDetailPage from './views/productDetail'
 import CartPage from './views/cart'
+import OrderPage from './views/order'
+// import adminLoginPage from './views/adminLogin'
+// import adminMangePage from "./views/adminManage"
 
 const router = createBrowserRouter([
   {
@@ -44,12 +47,19 @@ const router = createBrowserRouter([
   path:'/cart',
   element: <CartPage />
   },
-  
-  
+  {
+  path:'/myorder',
+  element: <OrderPage />
+  },
   // {
-  // path:'/test',
-  // element: <TestPage />
+  // path:'/admin/login',
+  // element: <adminLoginPage />
   // },
+  // {
+  // path:'/admin/page',
+  // element: <OrdadminMangePageerPage />
+  // },
+  
 ])
 
 createRoot(document.getElementById('root')).render(

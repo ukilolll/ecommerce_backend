@@ -19,20 +19,26 @@ export default function ProductDetail() {
             let serchId = param.id
             try{
                 const res = await axios.get(`/api/product/${serchId}`);
-                console.log(res.data)
+                // console.log(res.data)
                 setProducData(res.data)
             } catch (error) {
                 console.error("Error fetching:", error);
             }
 
-        }
-        fetchData();
-        console.log(productData)
+          cartDetail.forEach((obj) => {
+            if (String(obj.product_id) === String(serchId)) {
+              setQuantity(obj.quantity);
+            }
+          });
+
+      }
+
+      fetchData();
     }, [param]);
 
   const addToCart = async() =>{
     try{
-      const res = await axios.post(`/api/carts/addcartdtl`,{
+      const res = await addCart(`/api/carts/addcartdtl`,{
         cartId,
         "productId":param.id,
         quantity

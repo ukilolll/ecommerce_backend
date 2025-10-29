@@ -82,10 +82,24 @@ const styles = {
     backgroundColor: "#ffa000",
     color: "white",
     border: "none",
-    borderRadius: "5px",
+    borderRadius: "8px",
     padding: "10px 25px",
+    fontSize: '16px',
     cursor: "pointer",
+    transition: 'background-color 0.25s ease, transform 0.1s ease',
   },
+  logoutBtn: {
+    backgroundColor: '#ff4d4f',
+    color: 'white',
+    border: 'none',
+    padding: '10px 25px',
+    borderRadius: '8px',
+    fontSize: '16px',
+    cursor: 'pointer',
+    marginTop: "10px",
+    transition: 'background-color 0.25s ease, transform 0.1s ease',
+  },
+
 }
 
 export default styles

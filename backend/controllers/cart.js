@@ -200,10 +200,10 @@ export async function deleteCart(req, res) {
       return res.status(404).json({ message: "there are no item in cart or cart Id not exist" });
     }
 
-    await db.query({
-        text: `DELETE FROM carts WHERE id = $1`,
-        values: [req.params.id],
-    });
+    // await db.query({
+    //     text: `DELETE FROM carts WHERE id = $1`,
+    //     values: [req.params.id],
+    // });
 
     await db.query('COMMIT');
 

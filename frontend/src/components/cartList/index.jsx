@@ -1,6 +1,6 @@
 
 
-export const CartItem = ({ item, onUpdateQuantity }) => {
+export const CartItem = ({ cartId ,item, onUpdateQuantity }) => {
   return (
     <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
       <div className="w-20 h-20 bg-white rounded-lg flex items-center justify-center border border-gray-200">
@@ -15,29 +15,29 @@ export const CartItem = ({ item, onUpdateQuantity }) => {
         <h3 className="font-semibold text-gray-800">{item.name}</h3>
         <p className="text-sm text-gray-500">รหัสสินค้า: {item.product_id}</p>
       </div>
-      
+
       <div className="flex items-center gap-3">
         <button
-          onClick={() => onUpdateQuantity(item.product_id, item.quantity - 1)}
+          onClick={() => onUpdateQuantity(cartId,item.product_id, item.quantity - 1)}
           className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-100"
-          disabled={item.quantity <= 1}
+        //   disabled={item.quantity <= 1}
         >
-          <p className="w-4 h-4" />-<p/>
+          <p className="w-4 h-4" onClick={() => onUpdateQuantity(cartId,item.product_id, item.quantity - 1)} />-<p/>
         </button>
         
         <input
           type="number"
           value={item.quantity}
-          onChange={(e) => onUpdateQuantity(item.product_id, parseInt(e.target.value) || 1)}
+          onChange={(e) => onUpdateQuantity(cartId,item.product_id, parseInt(e.target.value))}
           className="w-16 h-8 text-center border border-gray-300 rounded"
           min="1"
         />
         
         <button
-          onClick={() => onUpdateQuantity(item.product_id, item.quantity + 1)}
+          onClick={() => onUpdateQuantity(cartId,item.product_id, item.quantity + 1)}
           className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-100"
         >
-          <p className="w-4 h-4" />+<p/>
+          <p className="w-4 h-4" onClick={() => onUpdateQuantity(cartId,item.product_id, item.quantity + 1)} />+<p/>
         </button>
       </div>
       
