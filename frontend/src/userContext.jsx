@@ -11,9 +11,9 @@ export const UserProvider = ({children}) => {
       const fetchUserData = async () => {
       try {
         const res = await axios.get("/api/user/info", { withCredentials: true });
-        setIsLogin(true)
         setUserData(res.data)
         console.log(res.data)
+        setIsLogin(true)
       }catch(err){
         if (axios.isAxiosError(err)) {
             setIsLogin(false)
@@ -26,14 +26,24 @@ export const UserProvider = ({children}) => {
       }
     }
 
+    const logout = async () => {
+    try {
+      await axios.post("/api/logout", {}, { withCredentials: true });
+    } catch (err) {
+      console.error("Logout request failed:", err);
+    } finally {
+      setIsLogin(false);
+      setUserData(null);
+    }
+  };
+
     useEffect(()=>{
         fetchUserData();
-        // console.log(`fetchUserData for update user state , is userlogin:${isLogin}`)
     } ,[])
 
 
   return (
-    <UserContext.Provider value={{ isLogin,isLoading ,userData , setIsLogin , fetchUserData }}>
+    <UserContext.Provider value={{ isLogin,isLoading ,userData , setIsLogin , fetchUserData ,logout}}>
         {children}
     </UserContext.Provider>
   );

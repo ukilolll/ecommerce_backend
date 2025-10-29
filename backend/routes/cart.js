@@ -11,7 +11,7 @@ router.get('/carts/getcartdtl/:id',authMiddleware(),cartC.getCartDtl)
 router.get('/carts/getcartbycus',authMiddleware(),cartC.getCartByUserId)
 router.get('/carts/getcart/:id',authMiddleware(),cartC.getCartByCartId)
 router.post('/carts/addcart',authMiddleware(),cartC.postCart)
-router.post('/carts/addcartdtl',authMiddleware(),cartC.postCartDtl)
+router.post('/carts/addcartdtl',authMiddleware(),cartC.setCartDtl)
 router.delete('/carts/deleteCart/:id',authMiddleware(),cartC.deleteCart)
 
 export default router

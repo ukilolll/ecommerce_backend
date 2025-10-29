@@ -3,14 +3,15 @@ import "./style.css";
 import axios from "axios";
 import {useState ,useEffect }from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
-import cart from "/images/cart.png";
+import cart from "/images/cart.png"
 import blank_profile from "/images/blank_profile.jpg";
 import search from "/images/search.png";
-import {useUser} from "../../context"
+import {useUser} from "../../userContext"
 
 const Header = () => { 
-  const {isLogin} = useUser() 
+  const {isLogin , logout} = useUser() 
   const [serchText , setserchText] = useState("")
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate()
@@ -22,10 +23,14 @@ const Header = () => {
     }
   }
 
+  const handleLogout =()=>{
+    logout()
+  }
+
     useEffect(() => {
       const data = JSON.parse(localStorage.getItem("catagoryData"))
       setCategories(data);
-  }, []);
+  }, [isLogin]);
 
   return (
     <header className="header">
@@ -50,11 +55,14 @@ const Header = () => {
         </div>
 
       <div className="user">
-        <img src={cart} alt="Cart" className="cart-icon" />
+        <img src={cart} alt="Cart" className="cart-icon" onClick={()=>{navigate("/cart")}}/>
         <div className="profile" onClick={()=>{navigate("/profile")}}>
           <img src={blank_profile} alt="Profile" className="profile-img" />
             {isLogin ? (
-              <span className="username">จัดการบัญชีของคุณ</span>
+              <div>
+                <span className="username">จัดการบัญชีของคุณ</span>
+                <button className="logout-btn" onClick={handleLogout}>Logout</button>
+              </div>
             ) : (
               <span className="username">login/register</span>
             )}

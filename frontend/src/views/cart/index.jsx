@@ -1,74 +1,76 @@
-import Header from "../../components/header"
-import Footer from "../../components/footer"
-import styles from "./styles";
+// import Header from "../../components/header"
+// import Footer from "../../components/footer"
+// import styles from "./styles";
+import cart from "/images/cart.png"
+import { CartItem } from "../../components/cartList";
 
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
+import {useUser} from "../../userContext"
+import { useCart } from "../../cartContext";
 
 export default function CartPage() {
-  const [quantity, setQuantity] = useState(1);
-  const price = 1600;
+  const {isLoading , isLogin} = useUser()
+  const {cartDetail , isLoadCart} = useCart()
+  const [cartData, setCartData] = useState([]);
 
-  const handleIncrement = () => setQuantity(quantity + 1);
-  const handleDecrement = () => quantity > 1 && setQuantity(quantity - 1);
+  const handleUpdateQuantity = (id, newQuantity) => {
+    if (newQuantity < 1) return;
+    
+    setCartData(items =>
+      items.map(item =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
 
-  const total = price * quantity;
+  const calculateTotal = () => {
+    return cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  };
+  
+  
+    useEffect(() => {
+      const getCartData = async ()=>{
+        setCartData(cartDetail)
+      }
 
+      getCartData();
+    }, [isLogin,isLoading,isLoadCart]);
 
-  return (
-    <>
-    <Header/>
-
-    <div style={styles.container}>
-      <div style={styles.cartBox}>
-        <div style={styles.header}>ตะกร้าสินค้าของคุณ</div>
-        <div style={styles.tableHeader}>
-          <span>รายการสินค้า</span>
-          <span>จำนวน</span>
-          <span>ราคา</span>
-        </div>
-
-        <div style={styles.productRow}>
-          <div style={styles.productInfo}>
-            <img
-              src="https://via.placeholder.com/50"
-              alt="KAI"
-              style={styles.productImage}
+return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 className="text-2xl font-bold mb-6 text-gray-800">ตะกร้าสินค้า</h1>
+        
+      <div className="space-y-4">
+          <div className="grid grid-cols-12 gap-4 px-4 pb-2 border-b border-gray-300 font-semibold text-gray-700">
+            <div className="col-span-6">รายการสินค้า</div>
+            <div className="col-span-3 text-center">จำนวน</div>
+            <div className="col-span-3 text-right">ราคา</div>
+          </div>
+          
+          {cartData.map((item) => (
+            <CartItem 
+              key={item.product_id} 
+              item={item} 
+              onUpdateQuantity={ handleUpdateQuantity }
             />
-            <div>
-              <div>
-                <strong>KAI เครื่องโกนหนวดไร้สาย</strong>
-              </div>
-              <div style={{ fontSize: "12px", color: "#555" }}>
-                รหัสสินค้า: E-0010120005
-              </div>
-            </div>
-          </div>
-
-          <div style={styles.qtyBox}>
-            <button style={styles.qtyButton} onClick={handleDecrement}>
-              -
-            </button>
-            <span>{quantity}</span>
-            <button style={styles.qtyButton} onClick={handleIncrement}>
-              +
-            </button>
-          </div>
-
-          <div>฿{total.toLocaleString()}</div>
+          ))}
         </div>
-
-        <div style={styles.summary}>
-          <div>
-            <strong>รวมทั้งหมด :</strong>{" "}
-            <span>฿{(price * quantity).toLocaleString()}</span>
+        
+        <div className="mt-8 pt-6 border-t border-gray-200">
+          <div className="flex items-center justify-between">
+            <div className="text-xl font-semibold text-gray-800">
+              รวมทั้งหมด : {calculateTotal().toLocaleString()}
+            </div>
+            
+            <button className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+              <img src={cart} className="w-5 h-5" />
+              ชำระเงิน
+            </button>
           </div>
-          <button style={styles.payButton}>
-            🛒 ชำระเงิน
-          </button>
         </div>
       </div>
     </div>
-
-    </>
   );
 }
+

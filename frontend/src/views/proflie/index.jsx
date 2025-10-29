@@ -6,7 +6,7 @@ import blank_profile from "/images/blank_profile.jpg"
 
 import React, { useState ,useEffect} from "react";
 import axios from "axios";
-import {useUser} from "../../context.jsx"
+import {useUser} from "../../userContext.jsx"
 import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
@@ -55,8 +55,8 @@ const handleUpload = async (e) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-        console.log(form)
         const res = await axios.patch("/api/user/info",{
         first_name: form.first_name || "",
         last_name: form.last_name || "",
@@ -64,7 +64,6 @@ const handleUpload = async (e) => {
         date_of_birth: form.date_of_birth || "",
         });
 
-      console.log(res.data);
       alert("อัปโหลดข้อมูลสำเร็จแล้ว!");
     } catch (err) {
 
@@ -72,6 +71,7 @@ const handleUpload = async (e) => {
         if (err.response) {
             alert(err.response.data.errorMsg);
             console.log(err.response.data)
+
         } 
         } else {
         console.error('Generic Error:', err.message);
@@ -91,7 +91,7 @@ const handleUpload = async (e) => {
     if (userData.profile_image){
       setProfileImage(`http://localhost:3000/user/profile/${userData.profile_image}`)
     }
-    userData.date_of_birth = userData.date_of_birth.substring(0,10)
+    userData.date_of_birth = userData.date_of_birth?.substring(0,10) 
     setForm(userData);
   }
 

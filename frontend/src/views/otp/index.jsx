@@ -5,7 +5,7 @@ import SmallCart from "/images/cart.png"
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import {useUser} from  "../../context"
+import {useUser} from  "../../userContext"
 
 export default function OTPPage(props) {
   const { fetchUserData } = useUser()

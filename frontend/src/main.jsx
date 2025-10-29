@@ -1,7 +1,10 @@
+import './index.css'
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import {createBrowserRouter,RouterProvider} from "react-router-dom"
-import {UserProvider} from "./context"
+import {UserProvider} from "./userContext"
+import {CartProvider} from "./cartContext"
 
 // import TestPage from './views/test'
 import LoginPage from "./views/login"
@@ -11,7 +14,6 @@ import ProfilePage from './views/proflie'
 import ProductPage from "./views/product"
 import ProductDetailPage from './views/productDetail'
 import CartPage from './views/cart'
-import './index.css'
 
 const router = createBrowserRouter([
   {
@@ -53,7 +55,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
 <StrictMode>
   <UserProvider>
-    <RouterProvider router={router} />
+    <CartProvider>
+      <RouterProvider router={router} />
+    </CartProvider>
   </UserProvider>
 </StrictMode>,
 )

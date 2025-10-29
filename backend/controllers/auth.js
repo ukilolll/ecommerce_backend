@@ -29,7 +29,7 @@ export async function register(req,res){
 
     await redis.setEx(`otp:${body.email}`, 60 * 5, JSON.stringify({body , otp, state:"register"}));
 
-    // sendOtp(body.email,otp)
+    sendOtp(email,otp)
 
     return res.json({ ok: true, message: 'If the email exists, an OTP has been sent.' });
 
@@ -74,7 +74,7 @@ export async function login(req,res){
 
     await redis.setEx(`otp:${email}`, 60 * 5, JSON.stringify(catchData));
 
-    // sendOtp(body.email,otp)
+    sendOtp(email,otp)
 
     return res.json({ ok: true, email});
 
@@ -82,6 +82,16 @@ export async function login(req,res){
         console.log(err)
         res.status(500).json({error:"internal server error",ok:false})
     }
+}
+
+export async function logout(req,res){
+    res.clearCookie("token", {
+    httpOnly: true,
+    secure: false, 
+    // sameSite: "lax", 
+  });
+
+    res.json({ message: "Logged out successfully" });
 }
 
 export async function otpVerify(req,res){
@@ -226,12 +236,12 @@ export async function homePage(req,res){
 }
 
 export async function  updateUserInfo(req,res){
-  try{
-    const {error ,errorMsg , body } = validator(validateObj.updateUserInfo,req.body)
-    if(error){
-        return res.status(400).json({errorMsg:errorMsg , ok:false})
-    }
-
+  try{ 
+    // const {error ,errorMsg , body } = validator(validateObj.updateUserInfo,req.body)
+    // if(error){
+    //     return res.status(400).json({errorMsg:errorMsg , ok:false})
+    // }
+    const body = req.body
     await db.query(
       `UPDATE users 
        SET first_name = $1,

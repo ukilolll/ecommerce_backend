@@ -56,7 +56,7 @@ export async function postCart(req, res) {
   }
 }
 
-export async function postCartDtl(req, res) {
+export async function setCartDtl(req, res) {
   try {
     const {error,errorMsg,body} = validator(validateObj.postCartDtl,req.body) 
     if(error){
@@ -66,27 +66,40 @@ export async function postCartDtl(req, res) {
     // Check if product already exists in cart
     const pdResult = await db.query({
       text: `SELECT * FROM cart_items WHERE cart_id = $1 AND product_id = $2`,
-      values: [req.body.cartId, req.body.productId],
+      values: [body.cartId, body.productId],
     });
 
-    if (pdResult.rowCount == 0) {
+
+    if (pdResult.rowCount == 0 && body.quantity > 0) {
       // Insert new cart item(product don't exists)
       const result = await db.query({
         text: `INSERT INTO cart_items (cart_id, product_id, quantity) 
                VALUES ($1, $2, $3) RETURNING id`,
-        values: [req.body.cartId, req.body.productId, req.body.quantity || 1],
+        values: [body.cartId, body.productId, body.quantity || 1],
       });
       return res.json({ cartDtlOK: true, messageAddCart: "Item added to cart" });
-    } else {
+    } 
+    else if (body.quantity >0) {
       // Update existing cart item quantity(product already exists)
-      const newQuantity = pdResult.rows[0].quantity + (req.body.quantity || 1);
       const result = await db.query({
         text: `UPDATE cart_items SET quantity = $1 
                WHERE cart_id = $2 AND product_id = $3`,
-        values: [newQuantity, req.body.cartId, req.body.productId],
+        values: [body.quantity , body.cartId, body.productId],
       });
       return res.json({ cartDtlOK: true, messageAddCart: "Item quantity updated" });
     }
+    else if (body.quantity == 0){
+        const result = await db.query({
+        text: `DELETE FROM cart_items
+               WHERE cart_id = $1 AND product_id = $2`,
+        values: [body.cartId, body.productId],
+      });
+      return res.json({ cartDtlOK: true, messageAddCart: "delete this item" });
+    }
+    else{
+      return res.status(400).json({errorMsg:"don't try to negative quantity numnber you nigative",cartDtlOK: false})
+    }
+
   } catch (err) {
     return res.json({
       cartDtlOK: false,
@@ -137,7 +150,7 @@ export async function getCartDtl(req, res) {
     const result = await db.query({
       text: `SELECT ROW_NUMBER() OVER (ORDER BY ci.product_id) AS row_number,
                     ci.product_id, p.name AS product_name, 
-                    ci.quantity, p.price
+                    ci.quantity, p.price ,p.image_name
              FROM cart_items ci
              LEFT JOIN products p ON ci.product_id = p.id
              WHERE ci.cart_id = $1
