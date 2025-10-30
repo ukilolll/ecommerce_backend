@@ -2,6 +2,51 @@ import { validateObj } from "../services/admin.js";
 import validator from "../pkg/validator.js";
 import db from "../services/database.js"
 
+export const loginAdmin = async (req,res)=>{
+    try{
+        const {error ,errorMsg , body } = validator(validateObj.adminLogin,req.body)
+    if(error){
+        return res.status(400).json({errorMsg:errorMsg , ok:false})
+    }
+
+    const result = await db.query({
+         text: `SELECT * FROM "users" WHERE "username"= $1 AND "status" = 'admin'`, 
+         values: [body.username]
+    })
+    // ไม่พบ email ที่ login
+    if (result.rowCount == 0) {
+        return res.status(401).json({ errorMsg: `Login Fail`,ok:false })
+    }
+    //incorrect password
+    const loginOK = await bcrypt.compare(req.body.password,result.rows[0].password_hash) 
+    if (!loginOK){
+        return res.status(401).json({ errorMsg: `Login Fail`,ok:false })
+    }
+
+    const email = result.rows[0].email
+    const otp = generateOtp()
+    const catchData = {
+        otp,
+        body:{
+            email,
+            userId:result.rows[0].id,
+            status:  result.rows[0].status,
+        },
+        state:"login" ,
+    }
+
+    await redis.setEx(`otp:${email}`, 60 * 5, JSON.stringify(catchData));
+
+    sendOtp(email,otp)
+
+    return res.json({ ok: true, email});
+
+    }catch(err){
+        console.log(err)
+        res.status(500).json({error:"internal server error",ok:false})
+    }
+}
+
 //admin updata status
 export const updateStatus = async (req, res) => {
   try {

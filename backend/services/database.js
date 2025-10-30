@@ -11,7 +11,6 @@ const db = new Pool({
     connectionString:`${DBSERVER}://${DBUSER}:${encodeURIComponent(DBPWD)}@${DBHOST}:${DBPORT}/${DBNAME}`
 })
 
-// Check database connection
 async function test() {
   try {
     const client = await db.connect();
