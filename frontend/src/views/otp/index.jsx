@@ -25,7 +25,12 @@ export default function OTPPage(props) {
             alert('otp verify successful!');
             localStorage.removeItem("verifyData");
             await fetchUserData()
-            navigate("/");
+            if (res.data.role === "member"){
+              navigate("/");
+            }else{
+              navigate("/admin/page");
+            }
+
         } catch (err) {
 
             if (axios.isAxiosError(err)) {

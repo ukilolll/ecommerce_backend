@@ -6,11 +6,10 @@ import * as handler from "../controllers/admin.js"
 const router = express.Router();
 const c = express.Router();
 
-c.post("login",handler.loginAdmin)
 c.get("/order",handler.adminCheckTransition);
 c.patch("/order/status",handler.updateStatus);
 c.get("/allmembers",handler.listMember);
-c.patch("/admin",handler.authorizeAdmin);
+c.patch("/toadmin",handler.authorizeAdmin);
 
 router.use("/admin", authMiddleware({ admin: true }), c);
 

@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
   const navigate = useNavigate()
-  const {isLogin,userData , isLoading} = useUser()
+  const {isLogin,userData , isLoading ,logout} = useUser()
   const [profileImage, setProfileImage] = useState(null);
   const [form, setForm] = useState({
       "username": "",

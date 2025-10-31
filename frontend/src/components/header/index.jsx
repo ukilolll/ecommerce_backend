@@ -53,7 +53,10 @@ const Header = () => {
         <img src={cart} alt="Cart" className="cart-icon" onClick={()=>{navigate("/cart")}}/>
         <span onClick={()=>{navigate("/myorder")}}>การซื้อของฉัน</span>
         <div className="profile" onClick={()=>{navigate("/profile")}}>
-          <img src={`/api/user/profile/${userData?.profile_image}` || blank_profile} alt="Profile" className="profile-img" />
+          <img src={userData?.profile_image ? `/api/user/profile/${userData.profile_image}` : blank_profile} 
+          alt="Profile" 
+          className="profile-img" />
+
             {isLogin ? (
               <div>
                 <span className="username">จัดการบัญชี</span>

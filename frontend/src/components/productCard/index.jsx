@@ -13,7 +13,7 @@ const image_url = `http://localhost:3000/product/image/${ProductData.image_name}
       <div style={styles.name}>{ProductData.name}</div>
       <div style={styles.bottomRow}>
         <div style={styles.price}>฿ {ProductData.price}</div>
-        <img src={AddCart} alt="Add to cart" style={styles.cartIcon} />
+        <div>stock: {ProductData.stock}</div>
       </div>
     </div>
   );

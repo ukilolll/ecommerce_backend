@@ -43,7 +43,6 @@ export default function CartPage() {
 
   
   const makeOrder = async () =>{
-    
     try{
     const res = await axios.post(`/api/order/${cartId}`);
     console.log("makeOrder")
@@ -55,8 +54,24 @@ export default function CartPage() {
     }
   }
 
+  
+  const deleteCart = async () => {
+    try {
+      await axios.delete(`/api/carts/deleteCart/${cartId}`);
+      console.log("Cart deleted successfully");
+      reload();
+    } catch (error) {
+      console.error("Error deleting cart:", error);
+    }
+  };
+
     useEffect(() => {
-      const getCartData = async ()=>{
+    const getCartData = async ()=>{
+    if (isLoading) return; 
+    if(!isLogin){
+      navigate("/login")
+      return
+    }
         setCartData(cartDetail)
       }
 
@@ -88,23 +103,33 @@ return (
           ))}
         </div>
         
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <div className="flex items-center justify-between">
-            <div className="text-xl font-semibold text-gray-800">
-              รวมทั้งหมด : {calculateTotal().toLocaleString()}
-            </div>
-            
-            <button 
+    <div className="mt-8 pt-6 border-t border-gray-200">
+      <div className="flex items-center justify-between">
+        <div className="text-xl font-semibold text-gray-800">
+          รวมทั้งหมด : {calculateTotal().toLocaleString()}
+        </div>
+
+        <div className="flex gap-3">
+          <button
+            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+            onClick={deleteCart}
+          >
+            🗑️ ลบตะกร้า
+          </button>
+
+          <button
             className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             onClick={makeOrder}
-            >
-              <img src={cart} className="w-5 h-5" />
-              ชำระเงิน
-            </button>
-          </div>
+          >
+            <img src={cart} className="w-5 h-5" alt="cart" />
+            ชำระเงิน
+          </button>
         </div>
       </div>
     </div>
+
+    </div>
+  </div>
 
   <Footer/>
   </>

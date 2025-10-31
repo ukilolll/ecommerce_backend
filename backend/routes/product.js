@@ -29,7 +29,7 @@ router.delete("/product/:id",authMiddleware({admin:true}),deleteProduct)
 router.use("/product/image",express.static("../project_db/product_images"))
 
 router.get("/categories",getCategories)
-router.post("category",authMiddleware({admin:true}),postCategory)
+router.post("/category",authMiddleware({admin:true}),postCategory)
 router.delete("/category/:id",authMiddleware({admin:true}),deleteCategory)
 
 

@@ -84,6 +84,51 @@ export async function login(req,res){
     }
 }
 
+export const loginAdmin = async (req,res)=>{
+    try{
+        const {error ,errorMsg , body } = validator(validateObj.login,req.body)
+    if(error){
+        return res.status(400).json({errorMsg:errorMsg , ok:false})
+    }
+
+    const result = await db.query({
+         text: `SELECT * FROM "users" WHERE "username"= $1 AND "status" = 'admin'`, 
+         values: [body.username]
+    })
+    // ไม่พบ email ที่ login
+    if (result.rowCount == 0) {
+        return res.status(401).json({ errorMsg: `Login Fail`,ok:false })
+    }
+    //incorrect password
+    const loginOK = await bcrypt.compare(req.body.password,result.rows[0].password_hash) 
+    if (!loginOK){
+        return res.status(401).json({ errorMsg: `Login Fail`,ok:false })
+    }
+
+    const email = result.rows[0].email
+    const otp = generateOtp()
+    const catchData = {
+        otp,
+        body:{
+            email,
+            userId:result.rows[0].id,
+            status:  result.rows[0].status,
+        },
+        state:"login" ,
+    }
+
+    await redis.setEx(`otp:${email}`, 60 * 5, JSON.stringify(catchData));
+
+    sendOtp(email,otp)
+
+    return res.json({ ok: true, email});
+
+    }catch(err){
+        console.log(err)
+        res.status(500).json({error:"internal server error",ok:false})
+    }
+}
+
 export async function logout(req,res){
     res.clearCookie("token", {
     httpOnly: true,
@@ -111,7 +156,6 @@ export async function otpVerify(req,res){
         if (cache.otp !== String(body.otp) || cache.body.email !== body.email) {
             return res.status(401).json({ ok: false, errorMsg: "Invalid OTP" });
         }
-
 
         if(cache.state === "register"){
             const result = await db.query(
@@ -141,7 +185,7 @@ export async function otpVerify(req,res){
             maxAge: 1000*60*60*24*30 // 1 month
         });
 
-        return res.json({ ok: true, message: "OTP verified" });
+        return res.json({ ok: true, message: "OTP verified" , role:cache.body.status });
 
     }else{
         return res.status(401).json({ ok: false, errorMsg: "OTP expired" });
@@ -153,32 +197,8 @@ export async function otpVerify(req,res){
     }
 }
 
-export function authMiddleware(options = { admin: false }) {
-    return function (req, res, next) {
-    try {
-        const token = req.cookies?.token;
-        if (!token) {
-            return res.status(401).json({ ok: false, errorMsg: "No token provided" });
-        }
-
-        const decoded = jwt.verify(token,  process.env.SECRET_KEY);
-
-        req.user = decoded; 
-
-        if (options.admin && decoded.status === "member") {
-            return res.status(403).json({ ok: false, errorMsg: "Forbidden: Admins only" });
-             
-        }
-
-        return next();
-    } catch (err) {
-        if (err.name === "TokenExpiredError") {
-            return res.status(401).json({ ok: false, errorMsg: "Token expired" });
-        }
-        return res.status(401).json({ ok: false, errorMsg: "Invalid token" });
-    }
-
-}
+export function isAdmin(req,res){
+    return res.json({ ok: true, message: "yes is admin" });
 }
 
 export async function uploadUserProfile(req,res){
@@ -264,6 +284,34 @@ export async function  updateUserInfo(req,res){
     console.log(err)
     res.status(500).json({errorMsg:"internal server error",ok:false})
   }
+}
+
+export function authMiddleware(options = { admin: false }) {
+    return function (req, res, next) {
+    try {
+        const token = req.cookies?.token;
+        if (!token) {
+            return res.status(401).json({ ok: false, errorMsg: "No token provided" });
+        }
+
+        const decoded = jwt.verify(token,  process.env.SECRET_KEY);
+
+        req.user = decoded; 
+
+        if (options.admin && decoded.status === "member") {
+            return res.status(403).json({ ok: false, errorMsg: "Forbidden: Admins only" });
+             
+        }
+
+        return next();
+    } catch (err) {
+        if (err.name === "TokenExpiredError") {
+            return res.status(401).json({ ok: false, errorMsg: "Token expired" });
+        }
+        return res.status(401).json({ ok: false, errorMsg: "Invalid token" });
+    }
+
+}
 }
 
 

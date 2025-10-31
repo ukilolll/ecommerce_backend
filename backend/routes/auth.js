@@ -3,8 +3,9 @@ import express from "express"
 import * as handler from "../controllers/auth.js"
 const router = express.Router()
 
-
 router.get("/user/info",handler.authMiddleware(),handler.homePage)
+router.post("/isadmin",handler.isAdmin)
+router.post("/admin/login",handler.loginAdmin)
 router.post("/register",handler.register)
 router.post("/login",handler.login)
 router.post("/logout",handler.logout)

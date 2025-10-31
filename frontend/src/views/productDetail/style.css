@@ -1,0 +1,196 @@
+.container-detail-product{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: 100vw;
+}
+
+.box-show-detail-product{
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    width: 80%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.box-show-image-price-cart-product{
+    display: flex;
+    flex-direction: row;
+}
+.box-show-images-product{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    gap: 12px;
+    margin-right: 24px;
+    
+}
+
+.main-image-product{
+    height: 400px;
+    width: 300px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.image-product{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.box-sub-image-product{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.sub-image{
+    height: 80px;
+    width: 80px;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.item-sub-image{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+.sub-image:hover{
+    border: 1px solid #fd9b3a;
+}
+
+
+.box-show-price-cart-product{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    gap: 0px;
+}
+
+.box-name-product{
+    border-bottom: 1px solid #ccc;
+}
+.nameproduct{
+    background-color: #888888;
+}
+.box-sub-detail-product{
+    height: 70%;
+    border-bottom: 1px solid #ccc;
+}
+
+.box-price-cart-product{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.price-product{
+    font-size: 1.5rem;
+}
+.box-quantity-product{
+    display: flex;
+    gap: 2rem;
+}
+.number-product{
+    color: #888888;
+}
+
+.box-cart-product{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+.btn-add-cart-product{
+    display: flex;
+    justify-content: center;
+    padding: 12px 24px;
+    width: 11rem;
+    background-color: #ffd5ac;
+    color: #ff8000;
+    font-weight: bold;
+    border:1px solid #ff8000 ;
+    border-radius: 4px;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 16px;
+}
+.btn-add-cart-product:hover{
+    background-color: #ffdbb8;
+}
+.btn-buy-cart-product{
+    display: flex;
+    justify-content: center;
+    width: 11rem;
+    padding: 12px 24px;
+    background-color: #ff8000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 16px;
+}
+.btn-buy-cart-product:hover{
+    background-color: #fd9b3a;
+}
+
+.icon-cart{
+    width: auto;
+    height: 20px;
+}
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* ช่องว่างระหว่างปุ่มกับ input */
+}
+
+.quantity-selector button {
+    height: 40px;
+    width: 40px;
+    border: 1px solid #ccc;
+    background-color: #ffffff; /* สีเขียวสวย */
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 8px; /* ปุ่มโค้งมน */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.quantity-selector button:hover {
+    background-color: #fdfdfd; /* สีเข้มเมื่อ hover */
+}
+
+.quantity-selector input {
+    height: 40px;
+    width: 60px;
+    text-align: center;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+}
+
+/* ลบลูกศรของ input number */
+.quantity-selector input::-webkit-outer-spin-button,
+.quantity-selector input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.quantity-selector input[type=number] {
+    appearance: textfield;
+    -moz-appearance: textfield; /* Firefox */
+}
+

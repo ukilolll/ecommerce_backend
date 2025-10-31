@@ -6,7 +6,8 @@ import {createBrowserRouter,RouterProvider} from "react-router-dom"
 import {UserProvider} from "./userContext"
 import {CartProvider} from "./cartContext"
 
-// import TestPage from './views/test'
+import AdminLoginPage from './views/adminLogin'
+import AdminMangePage from "./views/adminManage"
 import LoginPage from "./views/login"
 import RegisterPage from './views/register'
 import OtpPage from './views/otp'
@@ -15,8 +16,7 @@ import ProductPage from "./views/product"
 import ProductDetailPage from './views/productDetail'
 import CartPage from './views/cart'
 import OrderPage from './views/order'
-// import adminLoginPage from './views/adminLogin'
-// import adminMangePage from "./views/adminManage"
+
 
 const router = createBrowserRouter([
   {
@@ -51,14 +51,14 @@ const router = createBrowserRouter([
   path:'/myorder',
   element: <OrderPage />
   },
-  // {
-  // path:'/admin/login',
-  // element: <adminLoginPage />
-  // },
-  // {
-  // path:'/admin/page',
-  // element: <OrdadminMangePageerPage />
-  // },
+  {
+  path:'/admin/login',
+  element: <AdminLoginPage />
+  },
+  {
+  path:'/admin/page',
+  element: <AdminMangePage />
+  },
   
 ])
 

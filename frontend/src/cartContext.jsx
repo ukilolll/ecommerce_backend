@@ -13,10 +13,10 @@ export const CartProvider = ({ children }) => {
     try {
       let res = await getCartId();
       if (res.data.cartExist) {
+        setCartId(res.data.cartId);
+      }else{
         const newCart = await createCart();
         setCartId(newCart.data.cartId);
-      }else{
-        setCartId(res.data.cartId);
       }
 
       res  = await getCartDetail(res.data.cartId);

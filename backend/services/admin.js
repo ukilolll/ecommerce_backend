@@ -8,9 +8,5 @@ export const validateObj = {
     authorizeAdmin:Joi.object({
         userId:Joi.string().uuid().required(),
     }),
-    adminLogin:Joi.object({
-        username: Joi.string().min(3).max(30).required(),
-        password:Joi.string().min(8).max(30).required(),
-    }),
     
 }

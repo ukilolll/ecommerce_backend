@@ -71,7 +71,7 @@ export default function OrderResultsPage() {
     <>
     <Header />
 
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-100 py-8 px-4">
+    <div className="min-h-screen py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-full mb-4 shadow-lg">
@@ -96,7 +96,7 @@ export default function OrderResultsPage() {
                   <div className="flex items-center justify-between flex-wrap gap-3">
                     <div className="flex items-center space-x-3">
                       <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                      
                       </svg>
                       <span className="text-white font-semibold text-lg">
                         รหัสคำสั่งซื้อ  {order.order_id}
@@ -105,7 +105,7 @@ export default function OrderResultsPage() {
                     <div className={`flex items-center space-x-2 px-4 py-2 rounded-full ${statusConfig.bgColor} border ${statusConfig.borderColor}`}>
                       {order.status === 'paid' ? (
                         <svg className={`w-4 h-4 ${statusConfig.textColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+
                         </svg>
                       ) : (
                         <svg className={`w-4 h-4 ${statusConfig.textColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
