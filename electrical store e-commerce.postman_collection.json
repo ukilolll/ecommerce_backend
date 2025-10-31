@@ -15,7 +15,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/products?limit=10&offset=0",
+							"raw": "{{baseURL}}/products?limit=100&offset=0",
 							"host": [
 								"{{baseURL}}"
 							],
@@ -25,7 +25,7 @@
 							"query": [
 								{
 									"key": "limit",
-									"value": "10"
+									"value": "100"
 								},
 								{
 									"key": "offset",
@@ -62,7 +62,7 @@
 							},
 							"status": "OK",
 							"code": 200,
-							"_postman_previewlanguage": "",
+							"_postman_previewlanguage": null,
 							"header": [
 								{
 									"key": "X-Powered-By",
@@ -348,7 +348,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"ukilolll\",\r\n    \"password\":\"1234567890\"\r\n}",
+							"raw": "{\r\n    \"username\":\"ukibutsucker\",\r\n    \"password\":\"1234567890\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -360,13 +360,13 @@
 					"response": []
 				},
 				{
-					"name": "verify-otp",
+					"name": "verify otp",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"ukikillme@gmail.com\",\r\n    \"otp\":907419\r\n}",
+							"raw": "{\r\n    \"email\":\"peerawit.av@ku.th\",\r\n    \"otp\":268489\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -388,7 +388,7 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/C:/Users/DELL/OneDrive/Pictures/Saved Pictures/you_what_else_might_cry.jpg"
+									"src": "/C:/Users/DELL/OneDrive/Pictures/Saved Pictures/mowl.jpg"
 								}
 							]
 						},
@@ -414,7 +414,7 @@
 							"variable": [
 								{
 									"key": "image_name",
-									"value": "1759761840866-483648534-you_what_else_might_cry.jpg"
+									"value": ""
 								}
 							]
 						}
@@ -422,11 +422,73 @@
 					"response": []
 				},
 				{
-					"name": "home page",
+					"name": "get user info",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "{{baseURL}}/"
+						"url": "{{baseURL}}/user/info"
+					},
+					"response": []
+				},
+				{
+					"name": "update user infomation",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\":\"\",\r\n    \"last_name\":\"\",\r\n    \"date_of_birth\":\"2025-10-21\",\r\n    \"phone_number\":\"09385466666\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/user/info"
+					},
+					"response": []
+				},
+				{
+					"name": "admin login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"ukibutsucker\",\r\n    \"password\":\"1234567890\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/admin/login"
+					},
+					"response": []
+				},
+				{
+					"name": "is admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "{{baseURL}}/isadmin"
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "{{baseURL}}/logout"
 					},
 					"response": []
 				}
@@ -469,7 +531,7 @@
 							"variable": [
 								{
 									"key": "cartId",
-									"value": "1"
+									"value": "7"
 								}
 							]
 						}
@@ -518,7 +580,7 @@
 					"response": []
 				},
 				{
-					"name": "get cart by cart id",
+					"name": "get cart by cart id(notuse)",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -542,7 +604,7 @@
 							"variable": [
 								{
 									"key": "cartId",
-									"value": "1"
+									"value": "7"
 								}
 							]
 						}
@@ -563,13 +625,13 @@
 					"response": []
 				},
 				{
-					"name": "add items to cart",
+					"name": "set items to cart",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"cartId\":6,\r\n    \"productId\":1\r\n    // \"quantity\":3\r\n}",
+							"raw": "{\r\n    \"cartId\":7,\r\n    \"productId\":4,\r\n    \"quantity\":0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -602,7 +664,7 @@
 							"variable": [
 								{
 									"key": "cartId",
-									"value": "1"
+									"value": "7"
 								}
 							]
 						}
@@ -631,7 +693,7 @@
 							"variable": [
 								{
 									"key": "cartId",
-									"value": "1"
+									"value": "7"
 								}
 							]
 						}
@@ -691,7 +753,7 @@
 							},
 							"status": "OK",
 							"code": 200,
-							"_postman_previewlanguage": "",
+							"_postman_previewlanguage": null,
 							"header": [
 								{
 									"key": "X-Powered-By",
@@ -791,7 +853,7 @@
 							},
 							"status": "OK",
 							"code": 200,
-							"_postman_previewlanguage": "",
+							"_postman_previewlanguage": null,
 							"header": [
 								{
 									"key": "X-Powered-By",
@@ -837,13 +899,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/admin/members?offset=0&limit=100",
+							"raw": "{{baseURL}}/admin/allmembers?offset=0&limit=1",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"admin",
-								"members"
+								"allmembers"
 							],
 							"query": [
 								{
@@ -852,7 +914,7 @@
 								},
 								{
 									"key": "limit",
-									"value": "100"
+									"value": "1"
 								}
 							]
 						}
@@ -864,13 +926,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseURL}}/admin/members?offset=0&limit=1",
+									"raw": "{{baseURL}}/admin/allmembers?offset=0&limit=1",
 									"host": [
 										"{{baseURL}}"
 									],
 									"path": [
 										"admin",
-										"members"
+										"allmembers"
 									],
 									"query": [
 										{
@@ -886,7 +948,7 @@
 							},
 							"status": "OK",
 							"code": 200,
-							"_postman_previewlanguage": "",
+							"_postman_previewlanguage": null,
 							"header": [
 								{
 									"key": "X-Powered-By",
@@ -902,15 +964,15 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "219"
+									"value": "153"
 								},
 								{
 									"key": "ETag",
-									"value": "W/\"db-peUhNRiQO5xb+bG1n60+YTWavZw\""
+									"value": "W/\"99-EerLp00MafEStaqU1zcEFJJoj+Q\""
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 10 Oct 2025 10:13:09 GMT"
+									"value": "Fri, 31 Oct 2025 15:24:57 GMT"
 								},
 								{
 									"key": "Connection",
@@ -922,7 +984,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "[\n    {\n        \"id\": \"0ac013a9-8e13-469d-b602-bf1470224a05\",\n        \"username\": \"ukibutsucker\",\n        \"email\": \"peerawit.av@ku.th\",\n        \"password_hash\": \"$2b$11$X.JOwMIe4ZlfTjhSZ9HHoeULZwhZ8Rj/6cSBjhQtsZvR/S9vDIV7G\",\n        \"status\": \"member\",\n        \"profile_image\": null\n    }\n]"
+							"body": "[\n    {\n        \"id\": \"0705cce0-a1c7-4f4e-a7bb-0f0cc3d8628d\",\n        \"username\": \"realtest\",\n        \"email\": \"realtest@gmail.com\",\n        \"first_name\": null,\n        \"last_name\": null,\n        \"phone_number\": null\n    }\n]"
 						}
 					]
 				},
@@ -958,7 +1020,7 @@
 								}
 							}
 						},
-						"url": "{{baseURL}}/admin/admin"
+						"url": "{{baseURL}}/admin/toadmin"
 					},
 					"response": []
 				}
@@ -974,7 +1036,55 @@
 						"header": [],
 						"url": "{{baseURL}}/categories"
 					},
-					"response": []
+					"response": [
+						{
+							"name": "all categories",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "{{baseURL}}/categories"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "102"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"66-y4M3jdeLfUoIfWeSn7PuZR+y9V8\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 31 Oct 2025 05:37:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Electronics\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Home Appliances\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Kitchen Appliances\"\n    }\n]"
+						}
+					]
 				},
 				{
 					"name": "post category",
@@ -1029,3 +1139,4 @@
 		}
 	]
 }
+

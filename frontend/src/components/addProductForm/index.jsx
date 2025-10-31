@@ -83,7 +83,7 @@ export function ProductForm({ isOpen, onClose, product, onSubmitSuccess ,catagor
         const pushData = {
             "productId": product.id,
             "name": formData.name,
-            "description":formData.description,
+            "description":formData.description || null,
             "category_id": parseInt(formData.category_id),
             "price": parseInt(formData.price),
             "stock":parseInt(formData.stock)

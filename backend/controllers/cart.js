@@ -1,6 +1,6 @@
 import db from "../services/database.js"
 import validator from "../pkg/validator.js";
-import { validateObj } from "../services/cart.js";
+import { validateObj ,checkCartOwner } from "../services/cart.js";
 
 export async function getCartId(req, res) {
 try{
@@ -24,8 +24,8 @@ try{
 
 export async function postCart(req, res) {
   try {
+
     //chack cart already exist
-    console.log(req.user)
     const existingCart = await db.query({
       text: 'SELECT id FROM carts WHERE user_id = $1',
       values: [req.user.userId],
@@ -39,7 +39,6 @@ export async function postCart(req, res) {
       });
     }
 
-    // Create new cart - SERIAL will auto-generate the ID
     const result = await db.query({
       text: `INSERT INTO carts (user_id) VALUES ($1) RETURNING id`,
       values: [req.user.userId],
@@ -58,17 +57,20 @@ export async function postCart(req, res) {
 
 export async function setCartDtl(req, res) {
   try {
+
     const {error,errorMsg,body} = validator(validateObj.postCartDtl,req.body) 
     if(error){
        return res.status(400).json({errorMsg,cartDtlOK: false})
     }
+
+    let isOwner = await checkCartOwner(body.cartId,req.user.userId)
+    if (!isOwner) return res.status(403).json({errorMsg:"not own this cart"});
 
     // Check if product already exists in cart
     const pdResult = await db.query({
       text: `SELECT * FROM cart_items WHERE cart_id = $1 AND product_id = $2`,
       values: [body.cartId, body.productId],
     });
-
 
     if (pdResult.rowCount == 0 && body.quantity > 0) {
       // Insert new cart item(product don't exists)
@@ -89,6 +91,7 @@ export async function setCartDtl(req, res) {
       return res.json({ cartDtlOK: true, messageAddCart: "Item quantity updated" });
     }
     else if (body.quantity == 0){
+      //delete if quntity = 0
         const result = await db.query({
         text: `DELETE FROM cart_items
                WHERE cart_id = $1 AND product_id = $2`,
@@ -109,6 +112,10 @@ export async function setCartDtl(req, res) {
 }
 
 export async function sumCart(req, res) {
+
+  let isOwner = await checkCartOwner(req.params.id,req.user.userId)
+  if (!isOwner) return res.status(403).json({errorMsg:"not own this cart"});
+
   const result = await db.query({
     text: `SELECT SUM(ci.quantity) AS qty, SUM(ci.quantity * p.price) AS money
            FROM cart_items ci
@@ -126,6 +133,9 @@ export async function sumCart(req, res) {
 
 export async function getCartByCartId(req, res) {
   try {
+    let isOwner = await checkCartOwner(req.params.id,req.user.userId)
+    if (!isOwner) return res.status(403).json({errorMsg:"not own this cart"});
+
     const result = await db.query({
       text: `SELECT c.*, 
                     COUNT(ci.id) AS item_count,
@@ -144,9 +154,13 @@ export async function getCartByCartId(req, res) {
     return res.json({ error: err.message });
   }
 }
-
+//dont use
 export async function getCartDtl(req, res) {  
   try {
+
+    let isOwner = await checkCartOwner(req.params.id,req.user.userId)
+    if (!isOwner) return res.status(403).json({errorMsg:"not own this cart"});
+
     const result = await db.query({
       text: `SELECT ROW_NUMBER() OVER (ORDER BY ci.product_id) AS row_number,
                     ci.product_id, p.name AS product_name, 
@@ -166,6 +180,10 @@ export async function getCartDtl(req, res) {
 
 export async function getCartByUserId(req, res) {
   try {
+
+    let isOwner = await checkCartOwner(req.params.id,req.user.userId)
+    if (!isOwner) return res.status(403).json({errorMsg:"not own this cart"});
+
     const result = await db.query({
       text: `SELECT ROW_NUMBER() OVER (ORDER BY c.id DESC) AS row_number,
                     c.*, 
@@ -189,6 +207,10 @@ export async function getCartByUserId(req, res) {
 
 export async function deleteCart(req, res) {
     try{
+
+    let isOwner = await checkCartOwner(req.params.id,req.user.userId)
+    if (!isOwner) return res.status(403).json({errorMsg:"not own this cart"});
+
     await db.query('BEGIN');
 
     const result = await db.query({

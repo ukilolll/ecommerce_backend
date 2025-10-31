@@ -74,11 +74,6 @@ export default function OrderResultsPage() {
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-full mb-4 shadow-lg">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
-          </div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">ประวัติการสั่งซื้อ</h1>
           <p className="text-gray-600">รายการหรัสคำสั่งซื้อทั้งหมดของคุณ</p>
         </div>

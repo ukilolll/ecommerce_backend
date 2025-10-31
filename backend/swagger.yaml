@@ -1,4 +1,6 @@
 openapi: 3.0.0
+security:
+  - jwtCookieAuth: []
 info:
   title: electrical store e-commerce
   version: 1.0.0
@@ -11,6 +13,13 @@ tags:
   - name: transition
   - name: admin
   - name: category
+components:
+  securitySchemes:
+    jwtCookieAuth:
+      type: apiKey
+      in: cookie
+      name: token 
+
 paths:
   /products:
     get:
@@ -119,22 +128,22 @@ paths:
           description: Successful response
           content:
             application/json: {}
-    delete:
-      tags:
-        - product
-      summary: delete product by id
-      parameters:
-        - name: id
-          in: path
-          schema:
-            type: integer
-          required: true
-          example: '1'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
+    # delete:
+    #   tags:
+    #     - product
+    #   summary: delete product by id
+    #   parameters:
+    #     - name: id
+    #       in: path
+    #       schema:
+    #         type: integer
+    #       required: true
+    #       example: '1'
+    #   responses:
+    #     '200':
+    #       description: Successful response
+    #       content:
+    #         application/json: {}
   /product/searching/{search}:
     get:
       tags:
@@ -286,7 +295,7 @@ paths:
             schema:
               type: object
               example:
-                username: ukilolll
+                username: ukibutsucker
                 password: '1234567890'
       responses:
         '200':
@@ -297,15 +306,15 @@ paths:
     post:
       tags:
         - authentication
-      summary: verify-otp
+      summary: verify otp
       requestBody:
         content:
           application/json:
             schema:
               type: object
               example:
-                email: ukikillme@gmail.com
-                otp: 907419
+                email: peerawit.av@ku.th
+                otp: 268489
       responses:
         '200':
           description: Successful response
@@ -341,17 +350,85 @@ paths:
           schema:
             type: string
           required: true
-          example: 1759761840866-483648534-you_what_else_might_cry.jpg
       responses:
         '200':
           description: Successful response
           content:
             application/json: {}
-  /:
+  /user/info:
     get:
       tags:
         - authentication
-      summary: home page
+      summary: get user info
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    patch:
+      tags:
+        - authentication
+      summary: update user infomation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                first_name: ''
+                last_name: ''
+                date_of_birth: '2025-10-21'
+                phone_number: '09385466666'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /admin/login:
+    post:
+      tags:
+        - authentication
+      summary: admin login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                username: ukibutsucker
+                password: '1234567890'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /isadmin:
+    post:
+      tags:
+        - authentication
+      summary: is admin
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
+              example: '""'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /logout:
+    post:
+      tags:
+        - authentication
+      summary: logout
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
+              example: '""'
       responses:
         '200':
           description: Successful response
@@ -378,7 +455,7 @@ paths:
           schema:
             type: integer
           required: true
-          example: '1'
+          example: '7'
       responses:
         '200':
           description: Successful response
@@ -415,14 +492,14 @@ paths:
     get:
       tags:
         - cart
-      summary: get cart by cart id
+      summary: get cart by cart id(notuse)
       parameters:
         - name: cartId
           in: path
           schema:
             type: integer
           required: true
-          example: '1'
+          example: '7'
       responses:
         '200':
           description: Successful response
@@ -448,15 +525,16 @@ paths:
     post:
       tags:
         - cart
-      summary: add items to cart
+      summary: set items to cart
       requestBody:
         content:
           application/json:
             schema:
               type: object
               example:
-                cartId: 6
-                productId: 1
+                cartId: 7
+                productId: 4
+                quantity: 0
       responses:
         '200':
           description: Successful response
@@ -473,7 +551,7 @@ paths:
           schema:
             type: integer
           required: true
-          example: '1'
+          example: '7'
       responses:
         '200':
           description: Successful response
@@ -492,7 +570,7 @@ paths:
           schema:
             type: integer
           required: true
-          example: '1'
+          example: '7'
       responses:
         '200':
           description: Successful response
@@ -655,7 +733,7 @@ paths:
                         ]
                     }
                 ]
-  /admin/members:
+  /admin/allmembers:
     get:
       tags:
         - admin
@@ -670,7 +748,7 @@ paths:
           in: query
           schema:
             type: integer
-          example: '100'
+          example: '1'
       responses:
         '200':
           description: OK
@@ -690,15 +768,15 @@ paths:
             Content-Length:
               schema:
                 type: integer
-                example: '219'
+                example: '153'
             ETag:
               schema:
                 type: string
-                example: W/"db-peUhNRiQO5xb+bG1n60+YTWavZw"
+                example: W/"99-EerLp00MafEStaqU1zcEFJJoj+Q"
             Date:
               schema:
                 type: string
-                example: Fri, 10 Oct 2025 10:13:09 GMT
+                example: Fri, 31 Oct 2025 15:24:57 GMT
             Connection:
               schema:
                 type: string
@@ -714,12 +792,12 @@ paths:
               example: |-
                 [
                     {
-                        "id": "0ac013a9-8e13-469d-b602-bf1470224a05",
-                        "username": "ukibutsucker",
-                        "email": "peerawit.av@ku.th",
-                        "password_hash": "$2b$11$X.JOwMIe4ZlfTjhSZ9HHoeULZwhZ8Rj/6cSBjhQtsZvR/S9vDIV7G",
-                        "status": "member",
-                        "profile_image": null
+                        "id": "0705cce0-a1c7-4f4e-a7bb-0f0cc3d8628d",
+                        "username": "realtest",
+                        "email": "realtest@gmail.com",
+                        "first_name": null,
+                        "last_name": null,
+                        "phone_number": null
                     }
                 ]
   /admin/order/status:
@@ -740,7 +818,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /admin/admin:
+  /admin/toadmin:
     patch:
       tags:
         - admin
@@ -764,9 +842,59 @@ paths:
       summary: all categories
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+                example: Express
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '102'
+            ETag:
+              schema:
+                type: string
+                example: W/"66-y4M3jdeLfUoIfWeSn7PuZR+y9V8"
+            Date:
+              schema:
+                type: string
+                example: Fri, 31 Oct 2025 05:37:38 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
           content:
-            application/json: {}
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                    {
+                        "id": 1,
+                        "name": "Electronics"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Home Appliances"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Kitchen Appliances"
+                    }
+                ]
   /category:
     post:
       tags:
@@ -784,20 +912,20 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  /category/{id}:
-    delete:
-      tags:
-        - category
-      summary: delete category by id
-      parameters:
-        - name: id
-          in: path
-          schema:
-            type: integer
-          required: true
-          example: '1'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json: {}
+  # /category/{id}:
+  #   delete:
+  #     tags:
+  #       - category
+  #     summary: delete category by id
+  #     parameters:
+  #       - name: id
+  #         in: path
+  #         schema:
+  #           type: integer
+  #         required: true
+  #         example: '1'
+  #     responses:
+  #       '200':
+  #         description: Successful response
+  #         content:
+  #           application/json: {}

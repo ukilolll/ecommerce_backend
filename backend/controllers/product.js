@@ -92,7 +92,7 @@ export const putProduct = async (req, res) => {
     if(error){
        return res.status(400).json({errorMsg})
     }
-
+    console.log(body)
     const result = await db.query(
       `UPDATE products 
        SET name=$1, description=$2::jsonb, category_id=$3, price=$4, stock=$5

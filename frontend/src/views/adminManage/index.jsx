@@ -14,7 +14,7 @@ const [orderState , setOrderState] = useState({})
 const [data, setData] = useState(null);
 
   const [loading, setLoading] = useState(false);
-  const { isLoading, isLogin } = useUser();
+  const { isLoading, isLogin ,logout } = useUser();
   const navigate = useNavigate();
 
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
@@ -444,7 +444,7 @@ const [data, setData] = useState(null);
         </nav>
 
         {/* Logout */}
-        <div className="p-4 border-t border-yellow-500">
+        <div className="p-4 border-t border-yellow-500" onClick={()=>{logout()}}>
           <button className="w-full flex items-center gap-3 px-4 py-3 text-white hover:bg-yellow-500 rounded-lg transition">
             <LogOut size={20} />
             {sidebarOpen && <span className="font-medium">ออกจากระบบ</span>}
