@@ -93,7 +93,7 @@ return (
             <div className="col-span-3 text-right">ราคา</div>
           </div>
           
-          {cartData.map((item) => (
+          {cartData?.map((item) => (
             <CartItem 
               key={item.product_id} 
               item={item} 

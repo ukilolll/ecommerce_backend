@@ -11,21 +11,27 @@ export const CartProvider = ({ children }) => {
 
   const loadCart = async () => {
     try {
+      setIsLoadCart(true)
       let res = await getCartId();
+      console.log("get cartid data:",res.data)
+
+      let currentCartId;
       if (res.data.cartExist) {
+        currentCartId = res.data.cartId;
         setCartId(res.data.cartId);
       }else{
         const newCart = await createCart();
+        currentCartId = newCart.data.cartId;
         setCartId(newCart.data.cartId);
       }
 
-      res  = await getCartDetail(res.data.cartId);
-      setcartDetail(res.data);
-      console.log(res.data)
+      let res2  = await getCartDetail(currentCartId);
+      setcartDetail(res2.data);
+      console.log(res2.data)
     } catch (err) {
       console.error(err);
     }finally{
-      setIsLoadCart(!isLoadCart)
+      setIsLoadCart(false)
     }
   };
 

@@ -25,7 +25,7 @@ export default function ProductDetail() {
                 console.error("Error fetching:", error);
             }
 
-          cartDetail.forEach((obj) => {
+          cartDetail?.forEach((obj) => {
             if (String(obj.product_id) === String(serchId)) {
               setQuantity(obj.quantity);
             }

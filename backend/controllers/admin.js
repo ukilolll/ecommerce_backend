@@ -30,7 +30,7 @@ export const updateStatus = async (req, res) => {
     res.status(500).json({error:"internal server error"})
   }
 };
-//addmin chekc all users history
+//addmin check all users history
 export const adminCheckTransition = async (req, res) => {
   try {
     let limit = req.query.limit || 100;
@@ -58,7 +58,7 @@ export const adminCheckTransition = async (req, res) => {
       JOIN public.products AS p ON p.id = oitem.product_id
       GROUP BY 
         o.id, o.user_id, u.username, u.email, o.status, o.total_amount, o.created_at ,u.phone_number
-      ORDER BY o.id
+      ORDER BY o.id DESC
       LIMIT $1 OFFSET $2;
       `,
       [limit , offset]

@@ -14,7 +14,7 @@ export async function register(req,res){
     if(error){
         return res.status(400).json({errorMsg:errorMsg , ok:false})
     }
-
+    console.log(body)
     //check already use email
     const check = await db.query(`SELECT id FROM users WHERE "email"=$1`, [body.email]);
     if (check.rows.length > 0) {
@@ -29,7 +29,7 @@ export async function register(req,res){
 
     await redis.setEx(`otp:${body.email}`, 60 * 5, JSON.stringify({body , otp, state:"register"}));
 
-    sendOtp(email,otp)
+    sendOtp(body.email,otp)
 
     return res.json({ ok: true, message: 'If the email exists, an OTP has been sent.' });
 
@@ -157,6 +157,8 @@ export async function otpVerify(req,res){
             return res.status(401).json({ ok: false, errorMsg: "Invalid OTP" });
         }
 
+        let userId;
+
         if(cache.state === "register"){
             const result = await db.query(
             `INSERT INTO "users" 
@@ -164,14 +166,17 @@ export async function otpVerify(req,res){
             RETURNING "id", "email"`,
             [cache.body.username, cache.body.email, cache.body.passwordHash ]
             );
-
+            userId = result.rows[0].id
+        }else{
+            userId = cache.body.userId
         }
+        
 
         await redis.del(`otp:${body.email}`);
 
         //if state === login just send cookie
         const token = jwt.sign(
-            { userId: cache.body.userId, email: cache.body.email ,status:cache.body.status },
+            { userId: userId, email: cache.body.email ,status:cache.body.status },
             process.env.SECRET_KEY,
             { expiresIn: "30d" }
         );
@@ -185,7 +190,7 @@ export async function otpVerify(req,res){
             maxAge: 1000*60*60*24*30 // 1 month
         });
 
-        return res.json({ ok: true, message: "OTP verified" , role:cache.body.status });
+        return res.json({ ok: true, message: "OTP verified" , role:cache.body.status || "member" });
 
     }else{
         return res.status(401).json({ ok: false, errorMsg: "OTP expired" });
@@ -238,6 +243,8 @@ export async function homePage(req,res){
       [req.user.userId]
     );
     const userData = result.rows[0]
+    console.log(req.user.userId)
+    console.log(userData)
     res.json({
         "username": userData.username,
         "email": userData.email,
@@ -297,7 +304,7 @@ export function authMiddleware(options = { admin: false }) {
         const decoded = jwt.verify(token,  process.env.SECRET_KEY);
 
         req.user = decoded; 
-
+        console.log("userIn:" , req.user)
         if (options.admin && decoded.status === "member") {
             return res.status(403).json({ ok: false, errorMsg: "Forbidden: Admins only" });
              
